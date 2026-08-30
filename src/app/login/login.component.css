@@ -1,0 +1,392 @@
+* {
+  box-sizing: border-box;
+}
+
+:host {
+  display: block;
+  width: 100%;
+  min-height: 100vh;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.page {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  overflow: hidden;
+  background: #eefaf8;
+}
+
+/*
+  The supplied 1536 x 1024 image is the exact desktop visual reference.
+  Keeping the same aspect ratio here makes the positions line up pixel-for-pixel.
+*/
+.reference-bg {
+  position: absolute;
+  inset: 0;
+  background-image: url("/assets/medistore-reference.png");
+  background-position: center top;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+
+/*
+  Coordinates below are based directly on the supplied 1536 x 1024 image:
+  card: x=982, y=152, width=479, height=719. Width narrowed and re-centered
+  on the same midpoint to give the card tighter side margins.
+*/
+.login-card {
+  position: absolute;
+  left: 62.43%;
+  top: 12.84%;
+  width: 27%;
+  height: 70.21%;
+  padding: 70px 40px 50px;
+  border-radius: 15px;
+  background: #ffffff;
+  border: 1px solid #edf1f3;
+  box-shadow: 0 15px 45px rgba(23, 43, 61, 0.1);
+  color: #172a43;
+}
+
+/*
+  The reference already contains the visual card. These elements are
+  deliberately positioned to exactly overlay the controls in the image.
+*/
+.brand {
+  height: 1px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.brand-mark {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  border-radius: 5px;
+  background: linear-gradient(135deg, #12b89b, #08a47d);
+}
+
+.brand-mark::before,
+.brand-mark::after {
+  content: "";
+  position: absolute;
+  background: white;
+  border-radius: 2px;
+}
+
+.brand-mark::before {
+  width: 12px;
+  height: 33px;
+  left: 16px;
+  top: 5px;
+}
+
+.brand-mark::after {
+  width: 33px;
+  height: 12px;
+  left: 5px;
+  top: 16px;
+}
+
+.brand-name {
+  font-size: 34px;
+  line-height: 1;
+  font-weight: 700;
+  letter-spacing: -1.2px;
+  color: #172a43;
+}
+
+.brand-name span {
+  color: #0ca47c;
+}
+
+.welcome {
+  margin-top: 58px;
+  text-align: center;
+}
+
+.welcome h1 {
+  margin: 0;
+  font-size: 30px;
+  line-height: 1.2;
+  letter-spacing: -0.7px;
+  font-weight: 700;
+}
+
+.welcome p {
+  margin: 10px 0 0;
+  color: #52657d;
+  font-size: 15px;
+}
+
+form {
+  margin-top: 46px;
+}
+
+.input-box {
+  width: 100%;
+  height: 58px;
+  display: flex;
+  align-items: center;
+  border: 1px solid #d5dfe7;
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.82);
+  transition: 0.2s;
+}
+
+.input-box + .input-box {
+  margin-top: 26px;
+}
+
+.input-box:focus-within {
+  border-color: #0ca47c;
+  box-shadow: 0 0 0 3px rgba(12, 164, 124, 0.08);
+}
+
+.input-box.error-border {
+  border-color: #d45d5d;
+}
+
+.input-icon {
+  width: 22px;
+  height: 22px;
+  margin-left: 15px;
+  color: #5a6f86;
+  flex: 0 0 auto;
+}
+
+.input-box input {
+  min-width: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  outline: 0;
+  padding: 0 13px;
+  background: transparent;
+  color: #1d3047;
+  font-size: 15px;
+}
+
+.input-box input::placeholder {
+  color: #65788e;
+}
+
+.eye {
+  width: 44px;
+  height: 44px;
+  margin-right: 5px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 7px;
+  color: #526981;
+  background: transparent;
+  cursor: pointer;
+  flex: 0 0 44px;
+}
+
+.eye svg {
+  width: 21px;
+  height: 21px;
+}
+
+.options {
+  height: 51px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.remember {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #52657d;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.remember input {
+  position: absolute;
+  opacity: 0;
+}
+
+.box {
+  width: 19px;
+  height: 19px;
+  border: 1.5px solid #8da0b1;
+  border-radius: 4px;
+  background: white;
+}
+
+.remember input:checked + .box {
+  position: relative;
+  border-color: #0ca47c;
+  background: #0ca47c;
+}
+
+.remember input:checked + .box::after {
+  content: "";
+  position: absolute;
+  left: 6px;
+  top: 2px;
+  width: 5px;
+  height: 9px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.link {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #079b76;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.link:hover {
+  text-decoration: underline;
+}
+
+.sign-in {
+  width: 100%;
+  height: 45px;
+  margin-top: 1px;
+  border: 0;
+  border-radius: 9px;
+  background: #079d77;
+  color: white;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.sign-in:hover {
+  background: #078f6e;
+}
+
+.divider {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 27px;
+  margin-top: 37px;
+  color: #60738a;
+  font-size: 14px;
+}
+
+.divider span {
+  height: 1px;
+  background: #dce4e9;
+}
+
+.divider b {
+  font-weight: 400;
+}
+
+.contact {
+  margin-top: 36px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 7px;
+  color: #52657d;
+  font-size: 14px;
+}
+
+/*
+  At smaller widths, use the same exact visual card design without
+  forcing the full desktop composition onto a phone.
+*/
+@media (max-width: 760px) {
+  .page {
+    min-height: 100svh;
+    padding: 18px 14px;
+    background:
+      linear-gradient(rgba(240, 251, 249, 0.96), rgba(240, 251, 249, 0.96)),
+      url("/assets/medistore-reference.png") center / cover no-repeat;
+    overflow-y: auto;
+  }
+
+  .reference-bg {
+    display: none;
+  }
+
+  .login-card {
+    position: relative;
+    left: auto;
+    top: auto;
+    width: min(100%, 270px);
+    height: auto;
+    min-height: calc(100svh - 36px);
+    margin: 0 auto;
+    padding: 32px 24px;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.97);
+    box-shadow: 0 14px 45px rgba(27, 70, 83, 0.12);
+  }
+
+  .brand {
+    height: 50px;
+  }
+
+  .brand-mark {
+    width: 38px;
+    height: 38px;
+  }
+
+  .brand-mark::before {
+    width: 10px;
+    height: 29px;
+    left: 14px;
+    top: 4.5px;
+  }
+
+  .brand-mark::after {
+    width: 29px;
+    height: 10px;
+    left: 4.5px;
+    top: 14px;
+  }
+
+  .brand-name {
+    font-size: 29px;
+  }
+
+  .welcome {
+    margin-top: 35px;
+  }
+
+  .welcome h1 {
+    font-size: 28px;
+  }
+
+  form {
+    margin-top: 32px;
+  }
+
+  .contact {
+    padding-bottom: 5px;
+  }
+}
+
+@media (min-width: 761px) and (max-width: 1100px) {
+  .login-card {
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+
+  .brand-name {
+    font-size: 27px;
+  }
+
+  .welcome h1 {
+    font-size: 25px;
+  }
+}
