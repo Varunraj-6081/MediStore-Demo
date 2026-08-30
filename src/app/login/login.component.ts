@@ -1,15 +1,15 @@
-import { Component, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
-import { Router } from '@angular/router';
+import { Component, inject } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
+import { HttpClient } from "@angular/common/http";
+import { Router } from "@angular/router";
 
 @Component({
-  selector: 'app-login',
+  selector: "app-login",
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
-  templateUrl: './login.component.html',
-  styleUrl: './login.component.css',
+  templateUrl: "./login.component.html",
+  styleUrl: "./login.component.css",
 })
 export class LoginComponent {
   private fb = inject(FormBuilder);
@@ -17,14 +17,14 @@ export class LoginComponent {
   private router = inject(Router);
 
   private readonly apiUrl =
-    'https://mediumslateblue-stingray-765130.hostingersite.com/api/test-db';
+    "https://lightslategray-stingray-500941.hostingersite.com/api/test/users";
 
   showPassword = false;
   submitted = false;
 
   form = this.fb.nonNullable.group({
-    username: ['', Validators.required],
-    password: ['', [Validators.required, Validators.minLength(6)]],
+    username: ["", Validators.required],
+    password: ["", [Validators.required, Validators.minLength(6)]],
     remember: [false],
   });
 
@@ -36,10 +36,10 @@ export class LoginComponent {
     }
 
     this.http.get(this.apiUrl).subscribe({
-      next: (result) => console.log('API result:', result),
-      error: (err) => console.error('API error:', err),
+      next: (result) => console.log("API result:", result),
+      error: (err) => console.error("API error:", err),
     });
 
-    this.router.navigate(['/dashboard']);
+    this.router.navigate(["/dashboard"]);
   }
 }
