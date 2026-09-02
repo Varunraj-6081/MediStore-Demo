@@ -1,0 +1,424 @@
+<div class="suppliers-layout">
+  <app-sidebar></app-sidebar>
+
+  <main class="main-content">
+    <app-topbar></app-topbar>
+
+    <section class="suppliers-page">
+      <!-- HEADER -->
+
+      <div class="page-header">
+        <div>
+          <h1>Suppliers</h1>
+
+          <div class="breadcrumb">
+            <span>Home</span>
+            <span>›</span>
+            <strong>Suppliers</strong>
+          </div>
+        </div>
+
+        <button class="add-supplier-btn" (click)="addSupplier()">
+          <span>＋</span>
+          Add Supplier
+        </button>
+      </div>
+
+      <!-- SUMMARY CARDS -->
+
+      <div class="summary-grid">
+        <div class="summary-card">
+          <div class="summary-icon blue">👥</div>
+
+          <div>
+            <span>Total Suppliers</span>
+
+            <strong>42</strong>
+
+            <small class="green-text">
+              ↑ 16.7%
+              <em>from last month</em>
+            </small>
+          </div>
+        </div>
+
+        <div class="summary-card">
+          <div class="summary-icon green">🛒</div>
+
+          <div>
+            <span>Active Suppliers</span>
+
+            <strong>38</strong>
+
+            <small class="green-text">
+              ↑ 13.2%
+              <em>from last month</em>
+            </small>
+          </div>
+        </div>
+
+        <div class="summary-card">
+          <div class="summary-icon orange">▣</div>
+
+          <div>
+            <span>Total Purchase (This Month)</span>
+
+            <strong>₹2,45,320.00</strong>
+
+            <small class="green-text">
+              ↑ 18.4%
+              <em>from last month</em>
+            </small>
+          </div>
+        </div>
+
+        <div class="summary-card clickable" (click)="viewPayments()">
+          <div class="summary-icon red">▣</div>
+
+          <div>
+            <span>Outstanding Amount</span>
+
+            <strong>₹26,500.00</strong>
+
+            <small class="blue-text"> View Pending Payments </small>
+          </div>
+        </div>
+      </div>
+
+      <!-- MAIN CONTENT -->
+
+      <div class="main-grid">
+        <!-- LEFT -->
+
+        <div class="left-column">
+          <div class="supplier-card">
+            <div class="section-title">
+              <h2>Suppliers List</h2>
+            </div>
+
+            <!-- SEARCH -->
+
+            <div class="filter-bar">
+              <div class="search-box">
+                <span>⌕</span>
+
+                <input
+                  type="text"
+                  [(ngModel)]="searchText"
+                  (ngModelChange)="onSearch()"
+                  placeholder="Search supplier by name, email or phone..."
+                />
+              </div>
+
+              <select [(ngModel)]="selectedStatus" (ngModelChange)="onFilter()">
+                @for (status of statuses; track status) {
+                  <option [value]="status">{{ status }}</option>
+                }
+              </select>
+
+              <button class="export-btn" (click)="exportSuppliers()">
+                ↓ Export
+              </button>
+            </div>
+
+            <!-- TABLE -->
+
+            <div class="table-wrapper">
+              <table>
+                <thead>
+                  <tr>
+                    <th>#</th>
+
+                    <th>Supplier Name</th>
+
+                    <th>Contact Person</th>
+
+                    <th>Phone</th>
+
+                    <th>Email</th>
+
+                    <th>City</th>
+
+                    <th>Total Purchase (₹)</th>
+
+                    <th>Outstanding (₹)</th>
+
+                    <th>Status</th>
+
+                    <th>Action</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  @for (
+                    supplier of paginatedSuppliers;
+                    track supplier.id;
+                    let i = $index
+                  ) {
+                    <tr>
+                      <td>{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+
+                      <td>
+                        <strong> {{ supplier.name }} </strong>
+                      </td>
+
+                      <td>{{ supplier.contactPerson }}</td>
+
+                      <td>{{ supplier.phone }}</td>
+
+                      <td>{{ supplier.email }}</td>
+
+                      <td>{{ supplier.city }}</td>
+
+                      <td>₹{{ supplier.totalPurchase | number: "1.2-2" }}</td>
+
+                      <td>₹{{ supplier.outstanding | number: "1.2-2" }}</td>
+
+                      <td>
+                        <span
+                          class="status"
+                          [class.active]="supplier.status === 'Active'"
+                          [class.inactive]="supplier.status === 'Inactive'"
+                        >
+                          {{ supplier.status }}
+                        </span>
+                      </td>
+
+                      <td>
+                        <div class="action-wrapper">
+                          <button
+                            class="dots"
+                            (click)="toggleMenu(supplier.id)"
+                          >
+                            ⋮
+                          </button>
+
+                          @if (openMenu === supplier.id) {
+                            <div class="action-menu">
+                              <button (click)="viewSupplier(supplier)">
+                                View Supplier
+                              </button>
+
+                              <button (click)="editSupplier(supplier)">
+                                Edit Supplier
+                              </button>
+
+                              <button (click)="viewPurchases(supplier)">
+                                View Purchases
+                              </button>
+                            </div>
+                          }
+                        </div>
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+
+            <!-- PAGINATION -->
+
+            <div class="pagination">
+              <span>
+                Showing {{ pageStart }} to {{ pageEnd }} of 42 entries
+              </span>
+
+              <div class="page-buttons">
+                <button (click)="previousPage()" [disabled]="currentPage === 1">
+                  ‹
+                </button>
+
+                @for (page of [].constructor(totalPages); track $index) {
+                  <button
+                    [class.selected]="currentPage === $index + 1"
+                    (click)="goToPage($index + 1)"
+                  >
+                    {{ $index + 1 }}
+                  </button>
+                }
+
+                <button
+                  (click)="nextPage()"
+                  [disabled]="currentPage === totalPages"
+                >
+                  ›
+                </button>
+              </div>
+
+              <div class="rows">
+                Rows per page:
+
+                <select
+                  [(ngModel)]="pageSize"
+                  (ngModelChange)="currentPage = 1"
+                >
+                  <option [ngValue]="5">5</option>
+                  <option [ngValue]="10">10</option>
+                  <option [ngValue]="20">20</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- RECENT PURCHASE BILLS -->
+
+          <div class="recent-card">
+            <div class="section-header">
+              <h2>Recent Purchase Bills</h2>
+
+              <button>View All Bills</button>
+            </div>
+
+            <table class="recent-table">
+              <thead>
+                <tr>
+                  <th>Bill No.</th>
+                  <th>Supplier</th>
+                  <th>Amount (₹)</th>
+                  <th>Date</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                @for (bill of recentBills; track bill.billNo) {
+                  <tr>
+                    <td class="bill-no">{{ bill.billNo }}</td>
+
+                    <td>{{ bill.supplier }}</td>
+
+                    <td>₹{{ bill.amount | number: "1.2-2" }}</td>
+
+                    <td>{{ bill.date }}</td>
+
+                    <td>
+                      <span
+                        class="bill-status"
+                        [class.received]="bill.status === 'Received'"
+                        [class.pending]="bill.status === 'Pending'"
+                      >
+                        {{ bill.status }}
+                      </span>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- RIGHT -->
+
+        <div class="right-column">
+          <!-- PURCHASE SUMMARY -->
+
+          <div class="right-card">
+            <div class="right-title">
+              <h2>Purchase Summary (This Month)</h2>
+            </div>
+
+            <div class="purchase-summary">
+              <div class="donut">
+                <div class="donut-inner">
+                  <strong> ₹2,45,320 </strong>
+
+                  <span> Total Purchase </span>
+                </div>
+              </div>
+
+              <div class="summary-legend">
+                <div>
+                  <span class="dot green"></span>
+                  <span>MedPlus Distributors</span>
+                  <strong>₹1,25,450 (51.1%)</strong>
+                </div>
+
+                <div>
+                  <span class="dot orange"></span>
+                  <span>Apollo Pharmacy</span>
+                  <strong>₹75,230 (30.6%)</strong>
+                </div>
+
+                <div>
+                  <span class="dot red"></span>
+                  <span>Surgi Healthcare</span>
+                  <strong>₹28,640 (11.7%)</strong>
+                </div>
+
+                <div>
+                  <span class="dot purple"></span>
+                  <span>Others</span>
+                  <strong>₹16,000 (6.6%)</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TOP SUPPLIERS -->
+
+          <div class="right-card">
+            <div class="section-header">
+              <h2>Top Suppliers (This Month)</h2>
+
+              <button>View All</button>
+            </div>
+
+            <table class="mini-table">
+              <thead>
+                <tr>
+                  <th>Supplier</th>
+                  <th>Total Purchase (₹)</th>
+                  <th>Bills</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                @for (supplier of topSuppliers; track supplier.name) {
+                  <tr>
+                    <td>{{ supplier.name }}</td>
+
+                    <td>₹{{ supplier.purchase | number: "1.2-2" }}</td>
+
+                    <td>{{ supplier.bills }}</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+
+          <!-- PAYMENT DUE -->
+
+          <div class="right-card">
+            <div class="section-header">
+              <h2>Payment Due (Top 5)</h2>
+
+              <button>View All</button>
+            </div>
+
+            <table class="mini-table">
+              <thead>
+                <tr>
+                  <th>Supplier</th>
+                  <th>Outstanding Amount (₹)</th>
+                  <th>Due Since</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                @for (item of paymentDue; track item.supplier) {
+                  <tr>
+                    <td>{{ item.supplier }}</td>
+
+                    <td>₹{{ item.amount | number: "1.2-2" }}</td>
+
+                    <td>{{ item.dueSince }}</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>

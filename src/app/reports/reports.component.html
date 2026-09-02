@@ -1,0 +1,365 @@
+<div class="reports-layout">
+  <app-sidebar></app-sidebar>
+
+  <main class="main-content">
+    <app-topbar></app-topbar>
+
+    <section class="reports-page">
+      <!-- =====================================
+       HEADER
+  ====================================== -->
+
+      <div class="reports-header">
+        <div class="page-title">
+          <h1>Reports</h1>
+
+          <p>
+            Analyze your business performance and generate insightful reports.
+          </p>
+        </div>
+
+        <div class="header-actions">
+          <button class="date-btn" (click)="selectDateRange()">
+            <span>▣</span>
+
+            {{ selectedRange }}
+
+            <span class="arrow">⌄</span>
+          </button>
+
+          <button class="export-btn" (click)="exportReport()">
+            <span>⇩</span>
+
+            Export Report
+          </button>
+        </div>
+      </div>
+
+      <!-- =====================================
+       SUMMARY
+  ====================================== -->
+
+      <div class="section-title">Overview Summary (Selected Period)</div>
+
+      <div class="summary-grid">
+        @for (card of summaryCards; track card.title) {
+          <div class="summary-card">
+            <div
+              class="summary-icon"
+              [class.green]="card.type === 'green'"
+              [class.blue]="card.type === 'blue'"
+              [class.purple]="card.type === 'purple'"
+              [class.orange]="card.type === 'orange'"
+              [class.red]="card.type === 'red'"
+              [class.teal]="card.type === 'teal'"
+            >
+              {{ card.icon }}
+            </div>
+
+            <div class="summary-content">
+              <span>
+                {{ card.title }}
+              </span>
+
+              <strong>
+                {{ card.value }}
+              </strong>
+
+              <small> ↑ {{ card.change }} </small>
+
+              <label> vs previous period </label>
+            </div>
+          </div>
+        }
+      </div>
+
+      <!-- =====================================
+       CHARTS ROW
+  ====================================== -->
+
+      <div class="charts-grid">
+        <!-- SALES TREND -->
+
+        <div class="report-card chart-card">
+          <div class="card-header">
+            <h2>Sales Trend</h2>
+
+            <button>
+              Daily
+              <span>⌄</span>
+            </button>
+          </div>
+
+          <div class="chart-container">
+            <div class="chart-y-axis">
+              <span>₹25K</span>
+              <span>₹20K</span>
+              <span>₹15K</span>
+              <span>₹10K</span>
+              <span>₹5K</span>
+              <span>₹0</span>
+            </div>
+
+            <div class="chart-body">
+              <div class="chart-grid-line"></div>
+              <div class="chart-grid-line"></div>
+              <div class="chart-grid-line"></div>
+              <div class="chart-grid-line"></div>
+              <div class="chart-grid-line"></div>
+
+              <svg
+                class="trend-svg"
+                viewBox="0 0 700 220"
+                preserveAspectRatio="none"
+              >
+                <defs>
+                  <linearGradient id="salesFill" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#079b70" stop-opacity=".25" />
+
+                    <stop
+                      offset="100%"
+                      stop-color="#079b70"
+                      stop-opacity=".02"
+                    />
+                  </linearGradient>
+                </defs>
+
+                <path
+                  d="
+                M0 185
+                L116 165
+                L233 70
+                L350 35
+                L466 105
+                L583 50
+                L700 75
+                L700 220
+                L0 220
+                Z
+              "
+                  fill="url(#salesFill)"
+                />
+
+                <polyline
+                  class="sales-trend-line"
+                  points="
+                0,185
+                116,165
+                233,70
+                350,35
+                466,105
+                583,50
+                700,75
+              "
+                />
+
+                <circle cx="0" cy="185" r="6"></circle>
+                <circle cx="116" cy="165" r="6"></circle>
+                <circle cx="233" cy="70" r="6"></circle>
+                <circle cx="350" cy="35" r="6"></circle>
+                <circle cx="466" cy="105" r="6"></circle>
+                <circle cx="583" cy="50" r="6"></circle>
+                <circle cx="700" cy="75" r="6"></circle>
+              </svg>
+
+              <div class="chart-x-axis">
+                @for (item of salesData; track item.date) {
+                  <span>
+                    {{ item.date }}
+                  </span>
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PURCHASE TREND -->
+
+        <div class="report-card chart-card">
+          <div class="card-header">
+            <h2>Purchases Trend</h2>
+
+            <button>
+              Daily
+              <span>⌄</span>
+            </button>
+          </div>
+
+          <div class="chart-container">
+            <div class="chart-y-axis">
+              <span>₹25K</span>
+              <span>₹20K</span>
+              <span>₹15K</span>
+              <span>₹10K</span>
+              <span>₹5K</span>
+              <span>₹0</span>
+            </div>
+
+            <div class="chart-body">
+              <div class="chart-grid-line"></div>
+              <div class="chart-grid-line"></div>
+              <div class="chart-grid-line"></div>
+              <div class="chart-grid-line"></div>
+              <div class="chart-grid-line"></div>
+
+              <svg
+                class="trend-svg"
+                viewBox="0 0 700 220"
+                preserveAspectRatio="none"
+              >
+                <defs>
+                  <linearGradient id="purchaseFill" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#2875ed" stop-opacity=".22" />
+
+                    <stop
+                      offset="100%"
+                      stop-color="#2875ed"
+                      stop-opacity=".02"
+                    />
+                  </linearGradient>
+                </defs>
+
+                <path
+                  d="
+                M0 180
+                L116 155
+                L233 55
+                L350 90
+                L466 160
+                L583 55
+                L700 125
+                L700 220
+                L0 220
+                Z
+              "
+                  fill="url(#purchaseFill)"
+                />
+
+                <polyline
+                  class="purchase-trend-line"
+                  points="
+                0,180
+                116,155
+                233,55
+                350,90
+                466,160
+                583,55
+                700,125
+              "
+                />
+
+                <circle cx="0" cy="180" r="6"></circle>
+                <circle cx="116" cy="155" r="6"></circle>
+                <circle cx="233" cy="55" r="6"></circle>
+                <circle cx="350" cy="90" r="6"></circle>
+                <circle cx="466" cy="160" r="6"></circle>
+                <circle cx="583" cy="55" r="6"></circle>
+                <circle cx="700" cy="125" r="6"></circle>
+              </svg>
+
+              <div class="chart-x-axis">
+                @for (item of purchaseData; track item.date) {
+                  <span>
+                    {{ item.date }}
+                  </span>
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PAYMENT METHOD -->
+
+        <div class="report-card payment-card">
+          <div class="card-header">
+            <h2>Sales by Payment Method (This Period)</h2>
+          </div>
+
+          <div class="payment-wrapper">
+            <div class="donut">
+              <div class="donut-center">
+                <strong> ₹3,45,678 </strong>
+
+                <span> Total Sales </span>
+              </div>
+            </div>
+
+            <div class="payment-list">
+              @for (payment of paymentMethods; track payment.name) {
+                <div class="payment-item">
+                  <div class="payment-label">
+                    <i
+                      class="payment-color"
+                      [class.cash]="payment.class === 'cash'"
+                      [class.upi]="payment.class === 'upi'"
+                      [class.card]="payment.class === 'card'"
+                      [class.credit]="payment.class === 'credit'"
+                    ></i>
+
+                    <span>
+                      {{ payment.name }}
+                    </span>
+                  </div>
+
+                  <strong>
+                    {{ payment.amount }}
+
+                    ({{ payment.percentage }})
+                  </strong>
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- =====================================
+       REPORTS
+  ====================================== -->
+
+      <div class="reports-section">
+        <div class="reports-section-header">
+          <h2>Reports</h2>
+        </div>
+
+        <div class="reports-grid">
+          @for (report of reports; track report.title) {
+            <button class="report-tile" (click)="openReport(report)">
+              <div
+                class="report-icon"
+                [class.green]="report.type === 'green'"
+                [class.blue]="report.type === 'blue'"
+                [class.purple]="report.type === 'purple'"
+                [class.orange]="report.type === 'orange'"
+                [class.red]="report.type === 'red'"
+                [class.teal]="report.type === 'teal'"
+              >
+                {{ report.icon }}
+              </div>
+
+              <div class="report-info">
+                <h3>
+                  {{ report.title }}
+                </h3>
+
+                <p>
+                  {{ report.description }}
+                </p>
+              </div>
+
+              <span class="report-arrow"> › </span>
+            </button>
+          }
+        </div>
+      </div>
+
+      <!-- FOOTER -->
+
+      <div class="reports-footer">
+        <span> © 2026 MediStore. All rights reserved. </span>
+
+        <span> Version 2.4.1 </span>
+      </div>
+    </section>
+  </main>
+</div>

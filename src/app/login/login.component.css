@@ -200,6 +200,16 @@ form {
   justify-content: space-between;
 }
 
+.login-error {
+  margin: -8px 0 14px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: #fdecec;
+  color: #d93a3a;
+  font-size: 13px;
+  font-weight: 500;
+}
+
 .remember {
   display: flex;
   align-items: center;

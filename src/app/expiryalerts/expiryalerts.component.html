@@ -1,0 +1,469 @@
+<div class="expiry-layout">
+  <app-sidebar></app-sidebar>
+
+  <main class="main-content">
+    <app-topbar></app-topbar>
+
+    <section class="expiry-page">
+      <!-- HEADER -->
+
+      <div class="page-header">
+        <div>
+          <h1>Expiry Alerts</h1>
+
+          <div class="breadcrumb">
+            <span>Home</span>
+            <span>›</span>
+            <strong>Expiry Alerts</strong>
+          </div>
+        </div>
+
+        <div class="header-actions">
+          <button class="report-btn" (click)="generateReport()">
+            ▣ Generate Report
+          </button>
+
+          <button class="export-main-btn" (click)="exportExcel()">
+            ▣ Export to Excel
+          </button>
+        </div>
+      </div>
+
+      <!-- SUMMARY CARDS -->
+
+      <div class="summary-grid">
+        <div class="summary-card expired-card">
+          <div class="summary-icon red">⚠</div>
+
+          <div>
+            <span>Expired (Passed Date)</span>
+            <strong>18</strong>
+            <small>Value: ₹12,450.00</small>
+          </div>
+        </div>
+
+        <div class="summary-card">
+          <div class="summary-icon orange">▣</div>
+
+          <div>
+            <span>Expiring in 0 - 30 Days</span>
+            <strong>42</strong>
+            <small>Value: ₹28,750.00</small>
+          </div>
+        </div>
+
+        <div class="summary-card">
+          <div class="summary-icon blue">▣</div>
+
+          <div>
+            <span>Expiring in 31 - 90 Days</span>
+            <strong>76</strong>
+            <small>Value: ₹45,680.00</small>
+          </div>
+        </div>
+
+        <div class="summary-card">
+          <div class="summary-icon green">▣</div>
+
+          <div>
+            <span>Expiring in 91+ Days</span>
+            <strong>124</strong>
+            <small>Value: ₹78,230.00</small>
+          </div>
+        </div>
+      </div>
+
+      <!-- MAIN GRID -->
+
+      <div class="main-grid">
+        <!-- LEFT -->
+
+        <div class="left-column">
+          <!-- EXPIRY LIST -->
+
+          <div class="card expiry-list-card">
+            <div class="card-title">
+              <h2>Expiry Alerts List</h2>
+            </div>
+
+            <!-- FILTER -->
+
+            <div class="filter-bar">
+              <div class="search-box">
+                <span>⌕</span>
+
+                <input
+                  type="text"
+                  [(ngModel)]="searchText"
+                  (ngModelChange)="searchChanged()"
+                  placeholder="Search medicine name, batch number..."
+                />
+              </div>
+
+              <select
+                [(ngModel)]="selectedCategory"
+                (ngModelChange)="filterChanged()"
+              >
+                @for (category of categories; track category) {
+                  <option [value]="category">
+                    {{ category }}
+                  </option>
+                }
+              </select>
+
+              <select
+                [(ngModel)]="selectedStatus"
+                (ngModelChange)="filterChanged()"
+              >
+                @for (status of statuses; track status) {
+                  <option [value]="status">
+                    {{ status }}
+                  </option>
+                }
+              </select>
+
+              <select
+                [(ngModel)]="selectedPeriod"
+                (ngModelChange)="filterChanged()"
+              >
+                @for (period of periods; track period) {
+                  <option [value]="period">
+                    {{ period }}
+                  </option>
+                }
+              </select>
+
+              <button class="filter-btn">⚱ Filter</button>
+            </div>
+
+            <!-- TABLE -->
+
+            <div class="table-wrapper">
+              <table>
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Medicine Name</th>
+                    <th>Brand</th>
+                    <th>Category</th>
+                    <th>Batch No.</th>
+                    <th>Expiry Date</th>
+                    <th>Days Left</th>
+                    <th>Stock (Units)</th>
+                    <th>Value (₹)</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  @for (item of paginatedItems; track item.id; let i = $index) {
+                    <tr>
+                      <td>
+                        {{ (currentPage - 1) * pageSize + i + 1 }}
+                      </td>
+
+                      <td>
+                        <strong>{{ item.medicine }}</strong>
+                      </td>
+
+                      <td>
+                        {{ item.brand }}
+                      </td>
+
+                      <td>
+                        {{ item.category }}
+                      </td>
+
+                      <td>
+                        {{ item.batch }}
+                      </td>
+
+                      <td>
+                        {{ item.expiryDate }}
+                      </td>
+
+                      <td>
+                        <span
+                          class="days-badge"
+                          [class]="getDaysClass(item.daysLeft)"
+                        >
+                          {{ getDaysText(item.daysLeft) }}
+                        </span>
+                      </td>
+
+                      <td>
+                        {{ item.stock }}
+                      </td>
+
+                      <td>₹{{ item.value | number: "1.2-2" }}</td>
+
+                      <td>
+                        <span
+                          class="status-badge"
+                          [class.expired]="item.status === 'Expired'"
+                          [class.soon]="item.status === '0 - 30 Days'"
+                          [class.medium]="item.status === '31 - 90 Days'"
+                          [class.safe]="item.status === '91+ Days'"
+                        >
+                          {{ item.status }}
+                        </span>
+                      </td>
+
+                      <td>
+                        <button class="action-btn">⋮</button>
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+
+            <!-- PAGINATION -->
+
+            <div class="pagination">
+              <span>
+                Showing
+                {{ pageStart }}
+                to
+                {{ pageEnd }}
+                of 260 entries
+              </span>
+
+              <div class="page-buttons">
+                <button (click)="previousPage()" [disabled]="currentPage === 1">
+                  ‹
+                </button>
+
+                @for (page of [].constructor(totalPages); track $index) {
+                  <button
+                    [class.selected]="currentPage === $index + 1"
+                    (click)="goToPage($index + 1)"
+                  >
+                    {{ $index + 1 }}
+                  </button>
+                }
+
+                <button
+                  (click)="nextPage()"
+                  [disabled]="currentPage === totalPages"
+                >
+                  ›
+                </button>
+              </div>
+
+              <div class="rows">
+                Rows per page:
+
+                <select
+                  [(ngModel)]="pageSize"
+                  (ngModelChange)="currentPage = 1"
+                >
+                  <option [ngValue]="10">10</option>
+                  <option [ngValue]="20">20</option>
+                  <option [ngValue]="50">50</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- RECOMMENDED ACTIONS -->
+
+          <div class="card recommended-card">
+            <h2>Recommended Actions</h2>
+
+            <div class="recommend-grid">
+              <div class="recommend expired">
+                <div class="recommend-icon">×</div>
+
+                <div>
+                  <strong>Expired Items</strong>
+                  <span>18 items worth ₹12,450.00</span>
+                  <small>Remove or return expired items</small>
+                </div>
+
+                <button (click)="viewExpired()">View Expired Items</button>
+              </div>
+
+              <div class="recommend orange">
+                <div class="recommend-icon">◷</div>
+
+                <div>
+                  <strong>Expiring Soon</strong>
+                  <span>42 items worth ₹28,750.00</span>
+                  <small>Prioritize these items for sales</small>
+                </div>
+
+                <button (click)="viewSoon()">View 0 - 30 Days</button>
+              </div>
+
+              <div class="recommend blue">
+                <div class="recommend-icon">%</div>
+
+                <div>
+                  <strong>Discount Suggestions</strong>
+                  <span>12 items recommended</span>
+                  <small>Apply discounts to near-expiry items</small>
+                </div>
+
+                <button (click)="viewSuggestions()">View Suggestions</button>
+              </div>
+
+              <div class="recommend green">
+                <div class="recommend-icon">↔</div>
+
+                <div>
+                  <strong>Return to Supplier</strong>
+                  <span>8 items eligible for return</span>
+                  <small>Check return policies</small>
+                </div>
+
+                <button (click)="viewReturnItems()">View Return Items</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT -->
+
+        <div class="right-column">
+          <!-- SUMMARY CHART -->
+
+          <div class="card">
+            <div class="card-heading">
+              <h2>Expiry Summary (By Value)</h2>
+            </div>
+
+            <div class="chart-section">
+              <div class="donut">
+                <div class="donut-center">
+                  <strong>₹1,65,110</strong>
+                  <span>Total Value</span>
+                </div>
+              </div>
+
+              <div class="chart-legend">
+                <div>
+                  <i class="dot red"></i>
+                  <span>Expired</span>
+                  <strong>₹12,450 (7.5%)</strong>
+                </div>
+
+                <div>
+                  <i class="dot orange"></i>
+                  <span>0 - 30 Days</span>
+                  <strong>₹28,750 (17.4%)</strong>
+                </div>
+
+                <div>
+                  <i class="dot blue"></i>
+                  <span>31 - 90 Days</span>
+                  <strong>₹45,680 (27.7%)</strong>
+                </div>
+
+                <div>
+                  <i class="dot green"></i>
+                  <span>91+ Days</span>
+                  <strong>₹78,230 (47.4%)</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TOP EXPIRING -->
+
+          <div class="card">
+            <div class="section-header">
+              <h2>Top Expiring Medicines (Next 30 Days)</h2>
+
+              <button>View All</button>
+            </div>
+
+            <table class="mini-table">
+              <thead>
+                <tr>
+                  <th>Medicine</th>
+                  <th>Expiry Date</th>
+                  <th>Stock</th>
+                  <th>Value (₹)</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                @for (item of expiryItems.slice(3, 8); track item.id) {
+                  <tr>
+                    <td>
+                      {{ item.medicine }}
+                    </td>
+
+                    <td>
+                      {{ item.expiryDate }}
+                    </td>
+
+                    <td>
+                      {{ item.stock }}
+                    </td>
+
+                    <td>₹{{ item.value | number: "1.2-2" }}</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+
+          <!-- CATEGORY -->
+
+          <div class="card">
+            <div class="section-header">
+              <h2>Expiring By Category (Next 30 Days)</h2>
+
+              <button>View All</button>
+            </div>
+
+            <table class="mini-table">
+              <thead>
+                <tr>
+                  <th>Category</th>
+                  <th>Items</th>
+                  <th>Total Value (₹)</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                <tr>
+                  <td>Antibiotic</td>
+                  <td>16</td>
+                  <td>₹9,850.00</td>
+                </tr>
+
+                <tr>
+                  <td>Gastric</td>
+                  <td>8</td>
+                  <td>₹6,230.00</td>
+                </tr>
+
+                <tr>
+                  <td>Vitamins</td>
+                  <td>7</td>
+                  <td>₹3,200.00</td>
+                </tr>
+
+                <tr>
+                  <td>Analgesic</td>
+                  <td>6</td>
+                  <td>₹2,900.00</td>
+                </tr>
+
+                <tr>
+                  <td>Antihistamine</td>
+                  <td>5</td>
+                  <td>₹1,950.00</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>

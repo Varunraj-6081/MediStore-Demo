@@ -17,11 +17,18 @@
     </div>
 
     <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
-      <div class="input-box" [class.error-border]="submitted && form.controls.username.invalid">
+      <div
+        class="input-box"
+        [class.error-border]="submitted && form.controls.username.invalid"
+      >
         <svg viewBox="0 0 24 24" class="input-icon">
-          <path d="M20 21a8 8 0 0 0-16 0M12 13a5 5 0 1 0 0-10 5 5 0 0 0 0 10Z"
-                fill="none" stroke="currentColor" stroke-width="1.7"
-                stroke-linecap="round" />
+          <path
+            d="M20 21a8 8 0 0 0-16 0M12 13a5 5 0 1 0 0-10 5 5 0 0 0 0 10Z"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.7"
+            stroke-linecap="round"
+          />
         </svg>
         <input
           type="text"
@@ -31,13 +38,28 @@
         />
       </div>
 
-      <div class="input-box password-box" [class.error-border]="submitted && form.controls.password.invalid">
+      <div
+        class="input-box password-box"
+        [class.error-border]="submitted && form.controls.password.invalid"
+      >
         <svg viewBox="0 0 24 24" class="input-icon">
-          <rect x="5" y="10" width="14" height="10" rx="2"
-                fill="none" stroke="currentColor" stroke-width="1.7"/>
-          <path d="M8 10V7a4 4 0 0 1 8 0v3"
-                fill="none" stroke="currentColor" stroke-width="1.7"
-                stroke-linecap="round"/>
+          <rect
+            x="5"
+            y="10"
+            width="14"
+            height="10"
+            rx="2"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.7"
+          />
+          <path
+            d="M8 10V7a4 4 0 0 1 8 0v3"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.7"
+            stroke-linecap="round"
+          />
         </svg>
 
         <input
@@ -47,20 +69,42 @@
           autocomplete="current-password"
         />
 
-        <button type="button" class="eye" (click)="showPassword = !showPassword">
+        <button
+          type="button"
+          class="eye"
+          (click)="showPassword = !showPassword"
+        >
           <svg *ngIf="!showPassword" viewBox="0 0 24 24">
-            <path d="M2.5 12s3.5-5 9.5-5 9.5 5 9.5 5-3.5 5-9.5 5-9.5-5-9.5-5Z"
-                  fill="none" stroke="currentColor" stroke-width="1.7"/>
-            <circle cx="12" cy="12" r="2.5"
-                    fill="none" stroke="currentColor" stroke-width="1.7"/>
+            <path
+              d="M2.5 12s3.5-5 9.5-5 9.5 5 9.5 5-3.5 5-9.5 5-9.5-5-9.5-5Z"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.7"
+            />
+            <circle
+              cx="12"
+              cy="12"
+              r="2.5"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.7"
+            />
           </svg>
           <svg *ngIf="showPassword" viewBox="0 0 24 24">
-            <path d="M3 3l18 18M10.5 10.5a2 2 0 0 0 3 3"
-                  fill="none" stroke="currentColor" stroke-width="1.7"
-                  stroke-linecap="round"/>
-            <path d="M6.7 6.8C4.2 8.2 2.5 10.5 2.5 12c0 0 3.5 5 9.5 5 1.7 0 3.3-.4 4.7-1"
-                  fill="none" stroke="currentColor" stroke-width="1.7"
-                  stroke-linecap="round"/>
+            <path
+              d="M3 3l18 18M10.5 10.5a2 2 0 0 0 3 3"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.7"
+              stroke-linecap="round"
+            />
+            <path
+              d="M6.7 6.8C4.2 8.2 2.5 10.5 2.5 12c0 0 3.5 5 9.5 5 1.7 0 3.3-.4 4.7-1"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.7"
+              stroke-linecap="round"
+            />
           </svg>
         </button>
       </div>
@@ -75,12 +119,14 @@
         <button type="button" class="link">Forgot password?</button>
       </div>
 
+      <div class="login-error" *ngIf="loginError">
+        Invalid username or password.
+      </div>
+
       <button type="submit" class="sign-in">Sign In</button>
     </form>
 
-    <div class="divider">
-      <span></span><b>or</b><span></span>
-    </div>
+    <div class="divider"><span></span><b>or</b><span></span></div>
 
     <div class="contact">
       <span>Don’t have an account?</span>

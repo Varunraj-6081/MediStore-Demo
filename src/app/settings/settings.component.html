@@ -1,0 +1,424 @@
+<div class="settings-layout">
+  <app-sidebar></app-sidebar>
+
+  <main class="main-content">
+    <app-topbar></app-topbar>
+
+    <section class="settings-page">
+      <!-- HEADER -->
+
+      <div class="page-header">
+        <div>
+          <h1>Settings</h1>
+
+          <div class="breadcrumb">
+            <span>Home</span>
+            <span>›</span>
+            <strong>Settings</strong>
+          </div>
+        </div>
+      </div>
+
+      <!-- SETTINGS TABS -->
+
+      <div class="settings-tabs">
+        @for (tab of tabs; track tab) {
+          <button [class.active]="activeTab === tab" (click)="setTab(tab)">
+            <span class="tab-icon">
+              @switch (tab) {
+                @case ("General") {
+                  ⚙
+                }
+
+                @case ("Store & Business") {
+                  ▣
+                }
+
+                @case ("Users & Roles") {
+                  ♙
+                }
+
+                @case ("Billing & Taxes") {
+                  ▤
+                }
+
+                @case ("Integrations") {
+                  ♧
+                }
+              }
+            </span>
+
+            {{ tab }}
+          </button>
+        }
+      </div>
+
+      <!-- GENERAL CONTENT -->
+
+      @if (activeTab === "General") {
+        <!-- TOP ROW -->
+
+        <div class="top-grid">
+          <!-- STORE INFORMATION -->
+
+          <div class="settings-card store-card">
+            <h2>Store Information</h2>
+
+            <div class="store-content">
+              <div class="store-logo">
+                <span>⌂</span>
+              </div>
+
+              <div class="store-details">
+                <div class="detail-grid">
+                  <div>
+                    <label>Store Name</label>
+
+                    <strong>
+                      {{ store.name }}
+                    </strong>
+                  </div>
+
+                  <div>
+                    <label>Store Code</label>
+
+                    <strong>
+                      {{ store.code }}
+                    </strong>
+                  </div>
+                </div>
+
+                <div class="address-detail">
+                  <label>Address</label>
+
+                  <strong>
+                    {{ store.address }}
+                  </strong>
+                </div>
+
+                <div class="detail-grid">
+                  <div>
+                    <label>Phone Number</label>
+
+                    <strong>
+                      {{ store.phone }}
+                    </strong>
+                  </div>
+
+                  <div>
+                    <label>Email</label>
+
+                    <strong>
+                      {{ store.email }}
+                    </strong>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <button class="outline-btn" (click)="editStore()">
+              ✎ Edit Details
+            </button>
+          </div>
+
+          <!-- BUSINESS PREFERENCES -->
+
+          <div class="settings-card preferences-card">
+            <h2>Business Preferences</h2>
+
+            <div class="form-list">
+              <div class="form-row">
+                <label>Currency</label>
+
+                <select [(ngModel)]="preferences.currency">
+                  <option>Indian Rupee (₹)</option>
+
+                  <option>US Dollar ($)</option>
+
+                  <option>Euro (€)</option>
+                </select>
+              </div>
+
+              <div class="form-row">
+                <label>Date Format</label>
+
+                <select [(ngModel)]="preferences.dateFormat">
+                  <option>DD/MM/YYYY</option>
+                  <option>MM/DD/YYYY</option>
+                  <option>YYYY-MM-DD</option>
+                </select>
+              </div>
+
+              <div class="form-row">
+                <label>Time Format</label>
+
+                <select [(ngModel)]="preferences.timeFormat">
+                  <option>12 Hour (AM/PM)</option>
+                  <option>24 Hour</option>
+                </select>
+              </div>
+
+              <div class="form-row">
+                <label>Tax Type</label>
+
+                <select [(ngModel)]="preferences.taxType">
+                  <option>Inclusive of Tax</option>
+                  <option>Exclusive of Tax</option>
+                </select>
+              </div>
+
+              <div class="form-row">
+                <label>Default Sale Type</label>
+
+                <select [(ngModel)]="preferences.defaultSaleType">
+                  <option>Retail</option>
+                  <option>Wholesale</option>
+                </select>
+              </div>
+
+              <div class="form-row">
+                <label>Low Stock Alert Level</label>
+
+                <input type="number" [(ngModel)]="preferences.lowStockLevel" />
+              </div>
+
+              <p class="helper-text">
+                Alert when stock is below or equal to the level
+              </p>
+            </div>
+
+            <button class="outline-btn" (click)="savePreferences()">
+              ▣ Save Preferences
+            </button>
+          </div>
+
+          <!-- USER MANAGEMENT -->
+
+          <div class="settings-card users-card">
+            <div class="card-title-row">
+              <h2>User Management</h2>
+
+              <button class="outline-btn small" (click)="addUser()">
+                ＋ Add User
+              </button>
+            </div>
+
+            <div class="user-table-wrapper">
+              <table class="user-table">
+                <thead>
+                  <tr>
+                    <th>User Name</th>
+                    <th>Role</th>
+                    <th>Email</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  @for (user of users; track user.email) {
+                    <tr>
+                      <td>
+                        <div class="user-name">
+                          <span class="avatar">
+                            {{ user.initials }}
+                          </span>
+
+                          <strong>
+                            {{ user.name }}
+                          </strong>
+
+                          @if (user.name === "Varunraj") {
+                            <span class="you-badge"> You </span>
+                          }
+                        </div>
+                      </td>
+
+                      <td>
+                        {{ user.role }}
+                      </td>
+
+                      <td>
+                        {{ user.email }}
+                      </td>
+
+                      <td>
+                        <span
+                          class="status"
+                          [class.active]="user.status === 'Active'"
+                          [class.inactive]="user.status === 'Inactive'"
+                        >
+                          {{ user.status }}
+                        </span>
+                      </td>
+
+                      <td>
+                        <div class="user-actions">
+                          <button (click)="editUser(user)" title="Edit">
+                            ✎
+                          </button>
+
+                          <button
+                            class="delete"
+                            (click)="deleteUser(user)"
+                            title="Delete"
+                          >
+                            ♧
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+
+            <button class="view-users" (click)="viewAllUsers()">
+              View All Users
+            </button>
+          </div>
+        </div>
+
+        <!-- BOTTOM ROW -->
+
+        <div class="bottom-grid">
+          <!-- BILLING -->
+
+          <div class="settings-card billing-card">
+            <h2>Billing & Tax Settings</h2>
+
+            <div class="billing-form">
+              <div class="billing-row">
+                <label>GST Number</label>
+
+                <input [(ngModel)]="billing.gstNumber" />
+              </div>
+
+              <div class="billing-row">
+                <label>Bill Prefix</label>
+
+                <input [(ngModel)]="billing.billPrefix" />
+              </div>
+
+              <div class="billing-row">
+                <label>Next Invoice Number</label>
+
+                <input [(ngModel)]="billing.nextInvoice" />
+              </div>
+
+              <div class="billing-row">
+                <label>Round Off</label>
+
+                <select [(ngModel)]="billing.roundOff">
+                  <option>2 Decimal Places</option>
+
+                  <option>1 Decimal Place</option>
+
+                  <option>No Round Off</option>
+                </select>
+              </div>
+
+              <div class="billing-row">
+                <label>Place of Supply</label>
+
+                <select [(ngModel)]="billing.placeOfSupply">
+                  <option>Tamil Nadu (33)</option>
+
+                  <option>Karnataka (29)</option>
+
+                  <option>Kerala (32)</option>
+                </select>
+              </div>
+            </div>
+
+            <button class="outline-btn" (click)="saveBilling()">
+              ▣ Save Billing Settings
+            </button>
+          </div>
+
+          <!-- ABOUT -->
+
+          <div class="settings-card about-card">
+            <h2>About System</h2>
+
+            <div class="about-list">
+              <div>
+                <strong> Application Name </strong>
+
+                <span>
+                  {{ about.applicationName }}
+                </span>
+              </div>
+
+              <div>
+                <strong> Version </strong>
+
+                <span>
+                  {{ about.version }}
+                </span>
+              </div>
+
+              <div>
+                <strong> License Type </strong>
+
+                <span>
+                  {{ about.licenseType }}
+                </span>
+              </div>
+
+              <div>
+                <strong> Valid Until </strong>
+
+                <span>
+                  {{ about.validUntil }}
+                </span>
+              </div>
+
+              <div>
+                <strong> Support Email </strong>
+
+                <span>
+                  {{ about.supportEmail }}
+                </span>
+              </div>
+
+              <div>
+                <strong> Support Phone </strong>
+
+                <span>
+                  {{ about.supportPhone }}
+                </span>
+              </div>
+            </div>
+
+            <button class="outline-btn" (click)="checkForUpdates()">
+              ⟳ Check for Updates
+            </button>
+          </div>
+        </div>
+      }
+
+      <!-- OTHER TABS -->
+
+      @if (activeTab !== "General") {
+        <div class="coming-soon">
+          <div class="coming-icon">⚙</div>
+
+          <h2>
+            {{ activeTab }}
+          </h2>
+
+          <p>Settings for this section will be available here.</p>
+        </div>
+      }
+
+      <!-- FOOTER -->
+
+      <div class="settings-footer">
+        <span> © 2026 MediStore. All rights reserved. </span>
+
+        <span> Version 2.4.1 </span>
+      </div>
+    </section>
+  </main>
+</div>

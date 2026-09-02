@@ -1,0 +1,489 @@
+<div class="inventory-layout">
+  <app-sidebar></app-sidebar>
+
+  <main class="main-content">
+    <app-topbar></app-topbar>
+
+    <section class="inventory-page">
+      <!-- ==========================
+       PAGE HEADER
+  =========================== -->
+
+      <div class="page-header">
+        <div>
+          <h1>Inventory</h1>
+
+          <div class="breadcrumb">
+            <span>Home</span>
+
+            <span>›</span>
+
+            <strong>Inventory</strong>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==========================
+       SUMMARY CARDS
+  =========================== -->
+
+      <div class="summary-grid">
+        <div class="summary-card">
+          <div class="summary-icon green">▣</div>
+
+          <div class="summary-content">
+            <span>Total Medicines</span>
+
+            <strong>1,245</strong>
+
+            <small class="positive">
+              ↑ 8.6%
+              <span>from last month</span>
+            </small>
+          </div>
+        </div>
+
+        <div class="summary-card">
+          <div class="summary-icon blue">▣</div>
+
+          <div class="summary-content">
+            <span>Total Stock (Units)</span>
+
+            <strong>24,850</strong>
+
+            <small class="positive">
+              ↑ 12.3%
+              <span>from last month</span>
+            </small>
+          </div>
+        </div>
+
+        <div class="summary-card">
+          <div class="summary-icon orange">₹</div>
+
+          <div class="summary-content">
+            <span>Stock Value</span>
+
+            <strong> ₹{{ stockValue | number: "1.2-2" }} </strong>
+
+            <small class="positive">
+              ↑ 9.4%
+              <span>from last month</span>
+            </small>
+          </div>
+        </div>
+
+        <div class="summary-card clickable" (click)="viewLowStock()">
+          <div class="summary-icon red">⚠</div>
+
+          <div class="summary-content">
+            <span>Low Stock Items</span>
+
+            <strong>
+              {{ lowStockCount }}
+            </strong>
+
+            <small class="link-text"> View Low Stock </small>
+          </div>
+        </div>
+
+        <div class="summary-card clickable" (click)="viewExpiryAlerts()">
+          <div class="summary-icon purple">▣</div>
+
+          <div class="summary-content">
+            <span>Expiring Soon</span>
+
+            <strong>18</strong>
+
+            <small class="link-text"> View Expiry Alerts </small>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==========================
+       MAIN CONTENT
+  =========================== -->
+
+      <div class="main-grid">
+        <!-- ==========================
+         MEDICINE STOCK
+    =========================== -->
+
+        <div class="stock-card">
+          <div class="card-header">
+            <h2>Medicine Stock</h2>
+          </div>
+
+          <!-- FILTER BAR -->
+
+          <div class="filter-bar">
+            <div class="inventory-search">
+              <span>⌕</span>
+
+              <input
+                type="text"
+                [(ngModel)]="searchText"
+                (ngModelChange)="searchChanged()"
+                placeholder="Search medicine by name, brand or category..."
+              />
+            </div>
+
+            <select
+              [(ngModel)]="selectedCategory"
+              (ngModelChange)="filterChanged()"
+            >
+              @for (category of categories; track category) {
+                <option [value]="category">
+                  {{ category }}
+                </option>
+              }
+            </select>
+
+            <select
+              [(ngModel)]="selectedStatus"
+              (ngModelChange)="filterChanged()"
+            >
+              @for (status of statuses; track status) {
+                <option [value]="status">
+                  {{ status }}
+                </option>
+              }
+            </select>
+
+            <button class="export-btn" (click)="exportInventory()">
+              ↓ Export
+            </button>
+          </div>
+
+          <!-- TABLE -->
+
+          <div class="table-wrapper">
+            <table class="inventory-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+
+                  <th>Medicine Name</th>
+
+                  <th>Brand</th>
+
+                  <th>Category</th>
+
+                  <th>Batch No.</th>
+
+                  <th>Expiry Date</th>
+
+                  <th>Stock (Units)</th>
+
+                  <th>MRP (₹)</th>
+
+                  <th>Status</th>
+
+                  <th>Action</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                @for (
+                  medicine of paginatedMedicines;
+                  track medicine.id;
+                  let i = $index
+                ) {
+                  <tr>
+                    <td>
+                      {{ (currentPage - 1) * pageSize + i + 1 }}
+                    </td>
+
+                    <td>
+                      <strong class="medicine-name">
+                        {{ medicine.name }}
+                      </strong>
+                    </td>
+
+                    <td>
+                      {{ medicine.brand }}
+                    </td>
+
+                    <td>
+                      {{ medicine.category }}
+                    </td>
+
+                    <td>
+                      {{ medicine.batch }}
+                    </td>
+
+                    <td>
+                      {{ medicine.expiry }}
+                    </td>
+
+                    <td>
+                      <strong>
+                        {{ medicine.stock }}
+                      </strong>
+                    </td>
+
+                    <td>
+                      {{ medicine.mrp | number: "1.2-2" }}
+                    </td>
+
+                    <td>
+                      <span
+                        class="status-badge"
+                        [class.in-stock]="medicine.status === 'In Stock'"
+                        [class.low-stock]="medicine.status === 'Low Stock'"
+                        [class.out-stock]="medicine.status === 'Out of Stock'"
+                        [class.expired]="medicine.status === 'Expired'"
+                      >
+                        {{ medicine.status }}
+                      </span>
+                    </td>
+
+                    <td>
+                      <div class="action-wrapper">
+                        <button
+                          class="action-btn"
+                          (click)="toggleActionMenu(medicine.id)"
+                        >
+                          ⋮
+                        </button>
+
+                        @if (showActionMenu === medicine.id) {
+                          <div class="action-menu">
+                            <button (click)="viewMedicine(medicine)">
+                              View Details
+                            </button>
+
+                            <button (click)="editMedicine(medicine)">
+                              Edit Medicine
+                            </button>
+
+                            <button (click)="adjustStock(medicine)">
+                              Adjust Stock
+                            </button>
+                          </div>
+                        }
+                      </div>
+                    </td>
+                  </tr>
+                }
+
+                @if (filteredMedicines.length === 0) {
+                  <tr>
+                    <td colspan="10" class="empty-state">
+                      No medicines found.
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+
+          <!-- PAGINATION -->
+
+          <div class="pagination">
+            <span>
+              Showing
+              {{ pageStart }}
+              to
+              {{ pageEnd }}
+              of
+              {{ filteredMedicines.length }}
+              entries
+            </span>
+
+            <div class="pagination-controls">
+              <button (click)="previousPage()" [disabled]="currentPage === 1">
+                ‹
+              </button>
+
+              @for (page of [].constructor(totalPages); track $index) {
+                <button
+                  [class.active]="currentPage === $index + 1"
+                  (click)="goToPage($index + 1)"
+                >
+                  {{ $index + 1 }}
+                </button>
+              }
+
+              <button
+                (click)="nextPage()"
+                [disabled]="currentPage === totalPages"
+              >
+                ›
+              </button>
+            </div>
+
+            <div class="rows-select">
+              <span>Rows per page:</span>
+
+              <select [(ngModel)]="pageSize" (ngModelChange)="currentPage = 1">
+                <option [ngValue]="5">5</option>
+                <option [ngValue]="10">10</option>
+                <option [ngValue]="20">20</option>
+                <option [ngValue]="50">50</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- ==========================
+         RIGHT COLUMN
+    =========================== -->
+
+        <div class="right-column">
+          <!-- STOCK OVERVIEW -->
+
+          <div class="side-card stock-overview">
+            <div class="side-header">
+              <h2>Stock Overview</h2>
+
+              <select>
+                <option>This Month</option>
+                <option>This Week</option>
+                <option>This Year</option>
+              </select>
+            </div>
+
+            <div class="overview-content">
+              <div class="donut-chart">
+                <div class="donut-center">
+                  <strong>24,850</strong>
+
+                  <span>Total Units</span>
+                </div>
+              </div>
+
+              <div class="legend">
+                <div class="legend-row">
+                  <span class="legend-dot green"></span>
+
+                  <span>In Stock</span>
+
+                  <strong>18,430 (74.1%)</strong>
+                </div>
+
+                <div class="legend-row">
+                  <span class="legend-dot orange"></span>
+
+                  <span>Low Stock</span>
+
+                  <strong>4,120 (16.6%)</strong>
+                </div>
+
+                <div class="legend-row">
+                  <span class="legend-dot red"></span>
+
+                  <span>Out of Stock</span>
+
+                  <strong>1,230 (4.9%)</strong>
+                </div>
+
+                <div class="legend-row">
+                  <span class="legend-dot purple"></span>
+
+                  <span>Expired</span>
+
+                  <strong>1,070 (4.3%)</strong>
+                </div>
+              </div>
+            </div>
+
+            <div class="overview-message">
+              <span>↗</span>
+
+              <div>
+                Overall stock has increased by
+                <strong>12.3%</strong>
+                compared to last month.
+              </div>
+            </div>
+          </div>
+
+          <!-- TOP SELLING -->
+
+          <div class="side-card">
+            <div class="side-header">
+              <h2>Top Selling Medicines (This Month)</h2>
+
+              <button class="view-all">View All</button>
+            </div>
+
+            <table class="top-selling-table">
+              <thead>
+                <tr>
+                  <th>Medicine</th>
+
+                  <th>Units Sold</th>
+
+                  <th>Sales Value (₹)</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                @for (medicine of topSelling; track medicine.name) {
+                  <tr>
+                    <td>
+                      {{ medicine.name }}
+                    </td>
+
+                    <td>
+                      {{ medicine.unitsSold | number }}
+                    </td>
+
+                    <td>₹{{ medicine.salesValue | number: "1.2-2" }}</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==========================
+       LOW STOCK ALERTS
+  =========================== -->
+
+      <div class="low-stock-card">
+        <div class="low-stock-header">
+          <h2>Low Stock Alerts</h2>
+
+          <button>View All Alerts</button>
+        </div>
+
+        <div class="low-stock-grid">
+          @for (
+            medicine of lowStockMedicines;
+            track medicine.name;
+            let i = $index
+          ) {
+            <div class="low-stock-item">
+              <div
+                class="low-stock-icon"
+                [class.icon-pink]="i === 1 || i === 2"
+                [class.icon-purple]="i === 3"
+              >
+                ◇
+              </div>
+
+              <div class="low-stock-info">
+                <strong>
+                  {{ medicine.name }}
+                </strong>
+
+                <span>
+                  Current Stock:
+                  <b>{{ medicine.stock }}</b>
+                </span>
+
+                <span>
+                  Reorder Level:
+                  {{ medicine.reorderLevel }}
+                </span>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    </section>
+  </main>
+</div>

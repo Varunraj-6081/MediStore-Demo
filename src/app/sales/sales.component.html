@@ -1,0 +1,596 @@
+<div class="sales-layout">
+  <app-sidebar></app-sidebar>
+
+  <main class="main-content">
+    <app-topbar></app-topbar>
+
+    <section class="sales-page">
+      <!-- PAGE HEADER -->
+
+      <div class="page-header">
+        <div>
+          <h1>Sales</h1>
+
+          <div class="breadcrumb">
+            <span>Home</span>
+            <span>›</span>
+            <span>Sales</span>
+            <span>›</span>
+            <strong>New Sale</strong>
+          </div>
+        </div>
+
+        <button class="new-sale-btn" (click)="newSale()">
+          <span class="plus">+</span>
+          New Sale
+        </button>
+      </div>
+
+      <!-- SUMMARY CARDS -->
+
+      <div class="summary-grid">
+        <!-- Today's Sales -->
+
+        <div class="summary-card">
+          <div class="card-header">
+            <div class="card-icon sales-icon">🛒</div>
+
+            <div class="card-label">Today's Sales</div>
+          </div>
+
+          <div class="card-value green">₹12,450.00</div>
+
+          <div class="card-change positive">
+            ↑ +8.5%
+            <span>from yesterday</span>
+          </div>
+        </div>
+
+        <!-- Total invoices -->
+
+        <div class="summary-card">
+          <div class="card-header">
+            <div class="card-icon orders-icon">▤</div>
+
+            <div class="card-label">Total Invoices</div>
+          </div>
+
+          <div class="card-value blue">28</div>
+
+          <div class="card-change positive">
+            ↑ +12.3%
+            <span>from yesterday</span>
+          </div>
+        </div>
+
+        <!-- Average -->
+
+        <div class="summary-card">
+          <div class="card-header">
+            <div class="card-icon stock-icon">◉</div>
+
+            <div class="card-label">Average Bill Value</div>
+          </div>
+
+          <div class="card-value orange">₹444.64</div>
+
+          <div class="card-change danger">
+            ↓ -5.4%
+            <span>from yesterday</span>
+          </div>
+        </div>
+
+        <!-- Monthly sales -->
+
+        <div class="summary-card">
+          <div class="card-header">
+            <div class="card-icon expiry-icon">◇</div>
+
+            <div class="card-label">Total Sales (This Month)</div>
+          </div>
+
+          <div class="card-value red">₹3,45,678.00</div>
+
+          <div class="card-change positive">
+            ↑ +15.2%
+            <span>from last month</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- MAIN CONTENT -->
+
+      <div class="main-grid">
+        <!-- =========================
+         NEW SALE
+    ========================== -->
+
+        <div class="new-sale-card">
+          <div class="card-title">
+            <h2>New Sale</h2>
+          </div>
+
+          <!-- CUSTOMER -->
+
+          <div class="field-section">
+            <label> Customer <span>(Optional)</span> </label>
+
+            <div class="customer-row">
+              <div class="select-box">
+                <span class="user-icon">♙</span>
+
+                <select [(ngModel)]="selectedCustomer">
+                  <option>Ramesh Kumar (CUS1001)</option>
+
+                  <option>Walk-in Customer</option>
+
+                  <option>Priya Sharma (CUS1002)</option>
+
+                  <option>Suresh N (CUS1003)</option>
+                </select>
+              </div>
+
+              <button class="add-customer-btn">+</button>
+            </div>
+          </div>
+
+          <!-- SEARCH MEDICINE -->
+
+          <div class="field-section medicine-search-section">
+            <label> Search Medicine </label>
+
+            <div class="search-row">
+              <div class="medicine-search">
+                <span>⌕</span>
+
+                <input
+                  type="text"
+                  [(ngModel)]="searchMedicine"
+                  placeholder="Search medicine by name, brand or scan barcode..."
+                />
+              </div>
+
+              <button class="barcode-btn" (click)="scanBarcode()">
+                ▥ Scan Barcode
+              </button>
+            </div>
+
+            <button class="add-medicine-link" (click)="addMedicine()">
+              <span>+</span>
+              Add Medicine
+            </button>
+          </div>
+
+          <!-- MEDICINE TABLE -->
+
+          <div class="medicine-table-wrapper">
+            <table class="medicine-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Medicine</th>
+                  <th>Batch</th>
+                  <th>Expiry</th>
+                  <th>Qty</th>
+                  <th>Price (₹)</th>
+                  <th>Disc. (%)</th>
+                  <th>Total (₹)</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                @for (item of saleItems; track item.id; let i = $index) {
+                  <tr>
+                    <td>
+                      {{ i + 1 }}
+                    </td>
+
+                    <td>
+                      <div class="medicine-name">
+                        {{ item.medicine }}
+                      </div>
+
+                      <div class="medicine-brand">
+                        {{ item.brand }}
+                      </div>
+                    </td>
+
+                    <td>
+                      {{ item.batch }}
+                    </td>
+
+                    <td>
+                      {{ item.expiry }}
+                    </td>
+
+                    <td>
+                      <div class="quantity-control">
+                        <button (click)="decreaseQty(item)">−</button>
+
+                        <span>
+                          {{ item.qty }}
+                        </span>
+
+                        <button (click)="increaseQty(item)">+</button>
+                      </div>
+                    </td>
+
+                    <td>
+                      {{ item.price | number: "1.2-2" }}
+                    </td>
+
+                    <td>
+                      {{ item.discount }}
+                    </td>
+
+                    <td class="total-cell">
+                      ₹{{ item.qty * item.price | number: "1.2-2" }}
+                    </td>
+
+                    <td>
+                      <button class="delete-btn" (click)="removeItem(item)">
+                        🗑
+                      </button>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+
+          <!-- BOTTOM BILL AREA -->
+
+          <div class="bill-bottom">
+            <!-- DISCOUNT / NOTE -->
+
+            <div class="sale-options">
+              <div class="field-section">
+                <label> Add Discount </label>
+
+                <div class="discount-input">
+                  <input type="number" [(ngModel)]="discount" min="0" />
+
+                  <span>%</span>
+                </div>
+              </div>
+
+              <div class="field-section">
+                <label> Add Note <span>(Optional)</span> </label>
+
+                <textarea
+                  [(ngModel)]="note"
+                  placeholder="Enter note here..."
+                ></textarea>
+              </div>
+            </div>
+
+            <!-- TOTAL -->
+
+            <div class="total-box">
+              <div class="total-row">
+                <span>Subtotal</span>
+                <strong> ₹{{ subtotal | number: "1.2-2" }} </strong>
+              </div>
+
+              <div class="total-row">
+                <span>Discount</span>
+                <strong> ₹{{ discountAmount | number: "1.2-2" }} </strong>
+              </div>
+
+              <div class="total-row">
+                <span>Tax (GST 0%)</span>
+                <strong> ₹{{ taxAmount | number: "1.2-2" }} </strong>
+              </div>
+
+              <div class="grand-total-row">
+                <span>Grand Total</span>
+                <strong> ₹{{ grandTotal | number: "1.2-2" }} </strong>
+              </div>
+            </div>
+          </div>
+
+          <!-- BUTTONS -->
+
+          <div class="sale-actions">
+            <button class="clear-btn" (click)="clearCart()">Clear Cart</button>
+
+            <button class="process-btn" (click)="processSale()">
+              Process Sale
+            </button>
+          </div>
+        </div>
+
+        <!-- =========================
+         RIGHT SIDE
+    ========================== -->
+
+        <div class="right-column">
+          <!-- RECENT INVOICES -->
+
+          <div class="recent-card">
+            <div class="section-header">
+              <h2>Recent Invoices</h2>
+
+              <button class="view-all">View All</button>
+            </div>
+
+            <div class="invoice-table-wrapper">
+              <table class="invoice-table">
+                <thead>
+                  <tr>
+                    <th>Invoice</th>
+                    <th>Customer</th>
+                    <th>Amount (₹)</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  @for (invoice of invoices; track invoice.invoice) {
+                    <tr>
+                      <td>
+                        <button
+                          class="invoice-number"
+                          (click)="viewInvoice(invoice)"
+                        >
+                          {{ invoice.invoice }}
+                        </button>
+                      </td>
+
+                      <td>
+                        {{ invoice.customer }}
+                      </td>
+
+                      <td>
+                        {{ invoice.amount | number: "1.2-2" }}
+                      </td>
+
+                      <td>
+                        {{ invoice.date }}
+                      </td>
+
+                      <td>
+                        <span class="paid-badge">
+                          {{ invoice.status }}
+                        </span>
+                      </td>
+
+                      <td>
+                        <div class="invoice-actions">
+                          <button
+                            class="action-view"
+                            title="View Invoice"
+                            (click)="viewInvoice(invoice)"
+                          >
+                            👁
+                          </button>
+
+                          <button
+                            class="action-print"
+                            title="Print Invoice"
+                            (click)="printInvoice(invoice)"
+                          >
+                            🖨
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+
+            <button class="view-all-invoices">View All Invoices →</button>
+          </div>
+
+          <!-- PAYMENT SUMMARY -->
+
+          <div class="payment-card">
+            <h2>Payment Summary (Today)</h2>
+
+            <div class="payment-grid">
+              <div class="payment-item">
+                <div>
+                  💵
+                  <span>Cash</span>
+                </div>
+
+                <strong> ₹4,250.00 </strong>
+              </div>
+
+              <div class="payment-item">
+                <div>
+                  ▷
+                  <span>UPI</span>
+                </div>
+
+                <strong> ₹5,800.00 </strong>
+              </div>
+
+              <div class="payment-item">
+                <div>
+                  💳
+                  <span>Card</span>
+                </div>
+
+                <strong> ₹2,400.00 </strong>
+              </div>
+
+              <div class="payment-item total-payment">
+                <div>
+                  <span>Total Received</span>
+                </div>
+
+                <strong> ₹12,450.00 </strong>
+              </div>
+            </div>
+
+            <div class="payment-success">
+              <span class="success-icon"> ✓ </span>
+
+              All payments are recorded successfully.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- =========================
+       STOCK INFO
+  ========================== -->
+
+      <div class="stock-card">
+        <h2>Stock Info</h2>
+
+        <div class="stock-grid">
+          <div class="stock-item">
+            <div class="stock-icon blue">⛓</div>
+
+            <div>
+              <strong>Paracetamol 500mg</strong>
+              <span>Batch: PCT50023</span>
+              <small>
+                In Stock:
+                <b>148</b>
+              </small>
+            </div>
+          </div>
+
+          <div class="stock-item">
+            <div class="stock-icon pink">◇</div>
+
+            <div>
+              <strong>Azithromycin 500mg</strong>
+              <span>Batch: AZT5024</span>
+              <small>
+                In Stock:
+                <b>89</b>
+              </small>
+            </div>
+          </div>
+
+          <div class="stock-item">
+            <div class="stock-icon cyan">−</div>
+
+            <div>
+              <strong>Cetirizine 10mg</strong>
+              <span>Batch: CTZ1023</span>
+              <small>
+                In Stock:
+                <b>76</b>
+              </small>
+            </div>
+          </div>
+
+          <div class="stock-message">
+            <span>ⓘ</span>
+
+            <div>
+              Stock will be updated
+              <strong>after sale is processed.</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+@if (showPaymentModal) {
+  <div class="payment-overlay" (click)="closePaymentModal()">
+    <div class="payment-modal" (click)="$event.stopPropagation()">
+      <!-- HEADER -->
+
+      <div class="payment-header">
+        <div>
+          <h2>Complete Payment</h2>
+          <span>Confirm payment to complete this sale</span>
+        </div>
+
+        <button class="payment-close" (click)="closePaymentModal()">×</button>
+      </div>
+
+      <!-- AMOUNT -->
+
+      <div class="amount-due">
+        <span>Amount Due</span>
+
+        <strong> ₹{{ grandTotal | number: "1.2-2" }} </strong>
+      </div>
+
+      <!-- PAYMENT METHOD -->
+
+      <div class="payment-section">
+        <label>Payment Method</label>
+
+        <div class="payment-methods">
+          @for (method of paymentMethods; track method) {
+            <label
+              class="payment-method"
+              [class.active]="paymentMethod === method"
+            >
+              <input
+                type="radio"
+                name="paymentMethod"
+                [value]="method"
+                [(ngModel)]="paymentMethod"
+              />
+
+              <span>
+                {{ method }}
+              </span>
+            </label>
+          }
+        </div>
+      </div>
+
+      <!-- AMOUNT RECEIVED -->
+
+      <div class="payment-input">
+        <label>Amount Received</label>
+
+        <div class="amount-input-wrapper">
+          <span>₹</span>
+
+          <input
+            type="number"
+            [(ngModel)]="amountReceived"
+            min="0"
+            step="0.01"
+            placeholder="Enter amount"
+          />
+        </div>
+      </div>
+
+      <!-- CHANGE -->
+
+      <div class="change-row">
+        <span>Change</span>
+
+        <strong> ₹{{ changeAmount | number: "1.2-2" }} </strong>
+      </div>
+
+      <!-- FOOTER -->
+
+      <div class="payment-footer">
+        <button
+          type="button"
+          class="payment-cancel"
+          (click)="closePaymentModal()"
+        >
+          Cancel
+        </button>
+
+        <button
+          type="button"
+          class="confirm-payment"
+          (click)="confirmPayment()"
+        >
+          Confirm Payment
+        </button>
+      </div>
+    </div>
+  </div>
+}

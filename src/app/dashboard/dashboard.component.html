@@ -1,0 +1,586 @@
+<div class="dashboard-layout">
+  <app-sidebar></app-sidebar>
+
+  <main class="main-content">
+    <app-topbar></app-topbar>
+
+    <section class="dashboard-page">
+      <!-- PAGE HEADER -->
+
+      <div class="dashboard-header">
+        <div class="welcome-section">
+          <h1>Dashboard</h1>
+
+          <p>
+            Welcome back,
+            <strong>Admin!</strong>
+            Here's what's happening in your store today.
+          </p>
+        </div>
+
+        <div class="header-actions">
+          <button class="date-picker">
+            <span class="calendar-icon">▣</span>
+            26 May 2026 - 28 May 2026
+            <span>⌄</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- KPI CARDS -->
+
+      <div class="kpi-grid">
+        <!-- SALES -->
+
+        <div class="kpi-card">
+          <div class="kpi-icon green">🛒</div>
+
+          <div class="kpi-content">
+            <span>Total Sales (Today)</span>
+
+            <strong> ₹18,650.00 </strong>
+
+            <small class="positive"> ↑ 12.5% vs yesterday </small>
+          </div>
+        </div>
+
+        <!-- PURCHASE -->
+
+        <div class="kpi-card">
+          <div class="kpi-icon blue">🛒</div>
+
+          <div class="kpi-content">
+            <span>Total Purchases (Today)</span>
+
+            <strong> ₹12,450.00 </strong>
+
+            <small class="positive"> ↑ 9.8% vs yesterday </small>
+          </div>
+        </div>
+
+        <!-- PROFIT -->
+
+        <div class="kpi-card">
+          <div class="kpi-icon purple">↗</div>
+
+          <div class="kpi-content">
+            <span>Total Profit (Today)</span>
+
+            <strong> ₹6,200.00 </strong>
+
+            <small class="positive"> ↑ 15.3% vs yesterday </small>
+          </div>
+        </div>
+
+        <!-- LOW STOCK -->
+
+        <div class="kpi-card clickable">
+          <div class="kpi-icon red">⚠</div>
+
+          <div class="kpi-content">
+            <span>Low Stock Items</span>
+
+            <strong> 23 </strong>
+
+            <small class="link" (click)="viewLowStock()"> View details </small>
+          </div>
+        </div>
+
+        <!-- EXPIRY -->
+
+        <div class="kpi-card clickable">
+          <div class="kpi-icon orange">▣</div>
+
+          <div class="kpi-content">
+            <span>Expiring Soon</span>
+
+            <strong> 60 </strong>
+
+            <small class="link" (click)="viewExpiry()"> View details </small>
+          </div>
+        </div>
+      </div>
+
+      <!-- ROW 2 -->
+
+      <div class="two-column-grid">
+        <!-- SALES OVERVIEW -->
+
+        <div class="dashboard-card sales-overview">
+          <div class="card-header">
+            <h2>Sales Overview</h2>
+
+            <button>
+              This Week
+              <span>⌄</span>
+            </button>
+          </div>
+
+          <!-- SALES SUMMARY -->
+
+          <div class="mini-metrics">
+            <div>
+              <span>Today's Sales</span>
+              <strong>₹18,650</strong>
+              <small>↑ 12.5%</small>
+            </div>
+
+            <div>
+              <span>This Week</span>
+              <strong>₹1,24,850</strong>
+              <small>↑ 10.8%</small>
+            </div>
+
+            <div>
+              <span>This Month</span>
+              <strong>₹3,45,678</strong>
+              <small>↑ 15.2%</small>
+            </div>
+
+            <div>
+              <span>This Year</span>
+              <strong>₹42,75,320</strong>
+              <small>↑ 14.6%</small>
+            </div>
+          </div>
+
+          <!-- SALES CHART -->
+
+          <div class="chart">
+            <div class="y-axis">
+              <span>₹25K</span>
+              <span>₹20K</span>
+              <span>₹15K</span>
+              <span>₹10K</span>
+              <span>₹5K</span>
+              <span>₹0</span>
+            </div>
+
+            <div class="chart-area">
+              <div class="grid-line"></div>
+              <div class="grid-line"></div>
+              <div class="grid-line"></div>
+              <div class="grid-line"></div>
+              <div class="grid-line"></div>
+
+              <svg
+                viewBox="0 0 700 190"
+                preserveAspectRatio="none"
+                class="line-chart"
+              >
+                <defs>
+                  <linearGradient
+                    id="salesGradient"
+                    x1="0"
+                    y1="0"
+                    x2="0"
+                    y2="1"
+                  >
+                    <stop offset="0%" stop-color="#079b70" stop-opacity=".28" />
+
+                    <stop
+                      offset="100%"
+                      stop-color="#079b70"
+                      stop-opacity=".02"
+                    />
+                  </linearGradient>
+                </defs>
+
+                <path
+                  class="sales-area"
+                  d="M0,170
+                 L116,145
+                 L233,65
+                 L350,25
+                 L466,95
+                 L583,45
+                 L700,70
+                 L700,190
+                 L0,190 Z"
+                ></path>
+
+                <polyline
+                  class="sales-line"
+                  points="
+                0,170
+                116,145
+                233,65
+                350,25
+                466,95
+                583,45
+                700,70
+              "
+                ></polyline>
+
+                <circle cx="0" cy="170" r="5"></circle>
+                <circle cx="116" cy="145" r="5"></circle>
+                <circle cx="233" cy="65" r="5"></circle>
+                <circle cx="350" cy="25" r="5"></circle>
+                <circle cx="466" cy="95" r="5"></circle>
+                <circle cx="583" cy="45" r="5"></circle>
+                <circle cx="700" cy="70" r="5"></circle>
+              </svg>
+
+              <div class="x-axis">
+                @for (item of salesData; track item.day) {
+                  <span>
+                    {{ item.day }}
+                  </span>
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PAYMENT -->
+
+        <div class="dashboard-card payment-card">
+          <div class="card-header">
+            <h2>Sales by Payment Method (This Month)</h2>
+          </div>
+
+          <div class="payment-content">
+            <div class="donut-chart">
+              <div class="donut-hole">
+                <strong> ₹3,45,678 </strong>
+
+                <span> Total Sales </span>
+              </div>
+            </div>
+
+            <div class="payment-list">
+              @for (payment of paymentMethods; track payment.name) {
+                <div class="payment-row">
+                  <div class="payment-name">
+                    <i class="payment-dot" [class]="payment.class"></i>
+
+                    <span>
+                      {{ payment.name }}
+                    </span>
+                  </div>
+
+                  <strong>
+                    ₹{{ formatCurrency(payment.amount) }} ({{
+                      payment.percentage
+                    }}%)
+                  </strong>
+                </div>
+              }
+            </div>
+          </div>
+
+          <div class="payment-note">
+            <span>↗</span>
+
+            UPI payments increased by
+            <strong>18.6%</strong>
+            compared to last month.
+          </div>
+        </div>
+      </div>
+
+      <!-- ROW 3 -->
+
+      <div class="two-column-grid">
+        <!-- INVENTORY -->
+
+        <div class="dashboard-card inventory-card">
+          <div class="card-header">
+            <h2>Inventory Summary</h2>
+          </div>
+
+          <div class="inventory-main">
+            <div class="inventory-highlight">
+              <div class="inventory-icon blue">▣</div>
+
+              <div>
+                <span>Total Stock (Units)</span>
+
+                <strong> 24,850 </strong>
+
+                <small> ↑ 12.3% </small>
+              </div>
+            </div>
+
+            <div class="inventory-highlight">
+              <div class="inventory-icon orange">₹</div>
+
+              <div>
+                <span>Stock Value</span>
+
+                <strong> ₹12,45,680.00 </strong>
+
+                <small> ↑ 9.4% </small>
+              </div>
+            </div>
+          </div>
+
+          <div class="inventory-stats">
+            <div>
+              <i class="green-square"></i>
+
+              <span>In Stock Items</span>
+
+              <strong>
+                18,430
+                <small>(74.1%)</small>
+              </strong>
+            </div>
+
+            <div>
+              <i class="orange-square"></i>
+
+              <span>Low Stock Items</span>
+
+              <strong>
+                4,120
+                <small>(16.6%)</small>
+              </strong>
+            </div>
+
+            <div>
+              <i class="red-square"></i>
+
+              <span>Out of Stock Items</span>
+
+              <strong>
+                1,230
+                <small>(4.9%)</small>
+              </strong>
+            </div>
+
+            <div>
+              <i class="purple-square"></i>
+
+              <span>Expired Items</span>
+
+              <strong>
+                1,070
+                <small>(4.3%)</small>
+              </strong>
+            </div>
+          </div>
+
+          <button class="view-link" (click)="viewInventory()">
+            View Inventory
+          </button>
+        </div>
+
+        <!-- TOP MEDICINES -->
+
+        <div class="dashboard-card">
+          <div class="card-header">
+            <h2>Top Selling Medicines (This Month)</h2>
+
+            <button class="green-link">View All</button>
+          </div>
+
+          <table class="dashboard-table">
+            <thead>
+              <tr>
+                <th>Medicine</th>
+                <th>Units Sold</th>
+                <th>Sales Value (₹)</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              @for (medicine of topMedicines; track medicine.name) {
+                <tr>
+                  <td>
+                    {{ medicine.name }}
+                  </td>
+
+                  <td>
+                    {{ medicine.units | number }}
+                  </td>
+
+                  <td>₹{{ formatCurrency(medicine.sales) }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ROW 4 -->
+
+      <div class="three-column-grid">
+        <!-- PURCHASE -->
+
+        <div class="dashboard-card purchase-card">
+          <div class="card-header">
+            <h2>Purchase Overview</h2>
+
+            <button>
+              This Week
+              <span>⌄</span>
+            </button>
+          </div>
+
+          <div class="purchase-metrics">
+            <div>
+              <span>Today's Purchase</span>
+              <strong>₹12,450</strong>
+              <small>↑ 9.8%</small>
+            </div>
+
+            <div>
+              <span>This Week</span>
+              <strong>₹86,750</strong>
+              <small>↑ 11.4%</small>
+            </div>
+
+            <div>
+              <span>This Month</span>
+              <strong>₹2,45,320</strong>
+              <small>↑ 18.4%</small>
+            </div>
+
+            <div>
+              <span>This Year</span>
+              <strong>₹29,85,600</strong>
+              <small>↑ 16.2%</small>
+            </div>
+          </div>
+
+          <div class="purchase-chart">
+            <div class="purchase-lines">
+              <span>₹25K</span>
+              <span>₹20K</span>
+              <span>₹15K</span>
+              <span>₹10K</span>
+              <span>₹5K</span>
+              <span>₹0</span>
+            </div>
+
+            <svg viewBox="0 0 500 180" preserveAspectRatio="none">
+              <polyline
+                class="purchase-line"
+                points="
+              0,140
+              83,120
+              166,25
+              250,45
+              333,115
+              416,45
+              500,120
+            "
+              ></polyline>
+
+              <circle cx="0" cy="140" r="4"></circle>
+              <circle cx="83" cy="120" r="4"></circle>
+              <circle cx="166" cy="25" r="4"></circle>
+              <circle cx="250" cy="45" r="4"></circle>
+              <circle cx="333" cy="115" r="4"></circle>
+              <circle cx="416" cy="45" r="4"></circle>
+              <circle cx="500" cy="120" r="4"></circle>
+            </svg>
+          </div>
+
+          <div class="chart-days">
+            <span>22 May</span>
+            <span>23 May</span>
+            <span>24 May</span>
+            <span>25 May</span>
+            <span>26 May</span>
+            <span>27 May</span>
+            <span>28 May</span>
+          </div>
+        </div>
+
+        <!-- LOW STOCK -->
+
+        <div class="dashboard-card">
+          <div class="card-header">
+            <h2>Low Stock Alerts (23)</h2>
+
+            <button class="green-link">View All</button>
+          </div>
+
+          <table class="dashboard-table stock-table">
+            <thead>
+              <tr>
+                <th>Medicine</th>
+                <th>Stock</th>
+                <th>Reorder Level</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              @for (item of lowStockItems; track item.name) {
+                <tr>
+                  <td>
+                    <span class="stock-dot" [class]="item.level"> </span>
+
+                    {{ item.name }}
+                  </td>
+
+                  <td>
+                    {{ item.stock }}
+                  </td>
+
+                  <td>
+                    {{ item.reorder }}
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+
+        <!-- EXPIRING -->
+
+        <div class="dashboard-card">
+          <div class="card-header">
+            <h2>Expiring Soon (Next 30 Days)</h2>
+
+            <button class="green-link">View All</button>
+          </div>
+
+          <table class="dashboard-table expiry-table">
+            <thead>
+              <tr>
+                <th>Medicine</th>
+                <th>Expiry Date</th>
+                <th>Days Left</th>
+                <th>Stock</th>
+                <th>Value (₹)</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              @for (item of expiringItems; track item.name) {
+                <tr>
+                  <td>
+                    {{ item.name }}
+                  </td>
+
+                  <td>
+                    {{ item.expiry }}
+                  </td>
+
+                  <td>
+                    <span
+                      class="days-badge"
+                      [class.warning]="item.days <= 7"
+                      [class.safe]="item.days > 7"
+                    >
+                      {{ item.days }} days
+                    </span>
+                  </td>
+
+                  <td>
+                    {{ item.stock }}
+                  </td>
+
+                  <td>₹{{ formatCurrency(item.value) }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>

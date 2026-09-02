@@ -1,0 +1,588 @@
+<div class="purchase-layout">
+  <app-sidebar></app-sidebar>
+
+  <main class="main-content">
+    <app-topbar></app-topbar>
+
+    <section class="purchase-page">
+      <!-- ==============================
+       HEADER
+  =============================== -->
+
+      <div class="page-header">
+        <div>
+          <h1>Purchases</h1>
+
+          <div class="breadcrumb">
+            <span>Home</span>
+            <span>›</span>
+            <span>Purchases</span>
+            <span>›</span>
+
+            <strong>New Purchase</strong>
+          </div>
+        </div>
+
+        <button class="new-purchase-btn">
+          <span>+</span>
+
+          New Purchase
+        </button>
+      </div>
+
+      <!-- ==============================
+       SUMMARY CARDS
+  =============================== -->
+
+      <div class="summary-grid">
+        <div class="summary-card">
+          <div class="summary-icon blue">🛒</div>
+
+          <div class="summary-content">
+            <span>Today's Purchases</span>
+
+            <strong>₹8,650.00</strong>
+
+            <small class="positive">
+              ↑ 12.6%
+              <span>from yesterday</span>
+            </small>
+          </div>
+        </div>
+
+        <div class="summary-card">
+          <div class="summary-icon green">🛍</div>
+
+          <div class="summary-content">
+            <span>Total Purchases (This Month)</span>
+
+            <strong>₹2,45,320.00</strong>
+
+            <small class="positive">
+              ↑ 18.4%
+              <span>from last month</span>
+            </small>
+          </div>
+        </div>
+
+        <div class="summary-card">
+          <div class="summary-icon orange">◉</div>
+
+          <div class="summary-content">
+            <span>Total Bills (This Month)</span>
+
+            <strong>36</strong>
+
+            <small class="positive">
+              ↑ 8.9%
+              <span>from last month</span>
+            </small>
+          </div>
+        </div>
+
+        <div class="summary-card">
+          <div class="summary-icon pink">₹</div>
+
+          <div class="summary-content">
+            <span>Outstanding Amount</span>
+
+            <strong>₹26,500.00</strong>
+
+            <small class="link-text"> View all pending payments </small>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==============================
+       MAIN GRID
+  =============================== -->
+
+      <div class="main-grid">
+        <!-- ==========================
+         NEW PURCHASE
+    =========================== -->
+
+        <div class="purchase-card">
+          <h2>New Purchase</h2>
+
+          <!-- SUPPLIER -->
+
+          <div class="form-section">
+            <label>
+              Supplier
+              <b>*</b>
+            </label>
+
+            <div class="supplier-row">
+              <div class="select-wrapper">
+                <select [(ngModel)]="selectedSupplier">
+                  <option value="">Select Supplier</option>
+
+                  <option>MedPlus Distributors</option>
+
+                  <option>Apollo Pharmacy</option>
+
+                  <option>Surgi Healthcare</option>
+
+                  <option>HealthCare Distributors</option>
+                </select>
+              </div>
+
+              <button class="small-add-btn" (click)="addSupplier()">+</button>
+            </div>
+          </div>
+
+          <!-- INVOICE DETAILS -->
+
+          <div class="invoice-details">
+            <div class="form-section">
+              <label>
+                Invoice/Bill No.
+                <b>*</b>
+              </label>
+
+              <input
+                type="text"
+                [(ngModel)]="invoiceNumber"
+                placeholder="Enter invoice number"
+              />
+            </div>
+
+            <div class="form-section">
+              <label>
+                Invoice Date
+                <b>*</b>
+              </label>
+
+              <input type="date" [(ngModel)]="invoiceDate" />
+            </div>
+
+            <div class="form-section">
+              <label> Payment Terms </label>
+
+              <select [(ngModel)]="paymentTerms">
+                <option>Cash on Delivery</option>
+
+                <option>Credit - 7 Days</option>
+
+                <option>Credit - 15 Days</option>
+
+                <option>Credit - 30 Days</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- SEARCH MEDICINE -->
+
+          <div class="form-section medicine-search-section">
+            <label> Search Medicine </label>
+
+            <div class="search-row">
+              <div class="medicine-search">
+                <span>⌕</span>
+
+                <input
+                  type="text"
+                  [(ngModel)]="searchMedicine"
+                  placeholder="Search medicine by name or scan barcode..."
+                />
+              </div>
+
+              <button class="barcode-btn" (click)="scanBarcode()">
+                ▥ Scan Barcode
+              </button>
+            </div>
+          </div>
+
+          <!-- PURCHASE TABLE -->
+
+          <div class="table-wrapper">
+            <table class="purchase-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Medicine</th>
+                  <th>Batch No.</th>
+                  <th>Expiry Date</th>
+                  <th>Qty</th>
+                  <th>Purchase Price (₹)</th>
+                  <th>Discount (%)</th>
+                  <th>GST (%)</th>
+                  <th>Total (₹)</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                @for (item of purchaseItems; track item.id; let i = $index) {
+                  <tr>
+                    <td>
+                      {{ i + 1 }}
+                    </td>
+
+                    <td>
+                      <div class="medicine-name">
+                        {{ item.medicine }}
+                      </div>
+
+                      <div class="medicine-brand">
+                        {{ item.brand }}
+                      </div>
+                    </td>
+
+                    <td>
+                      {{ item.batch }}
+                    </td>
+
+                    <td>
+                      {{ item.expiry }}
+                    </td>
+
+                    <td>
+                      <div class="quantity-control">
+                        <button (click)="decreaseQty(item)">−</button>
+
+                        <span>
+                          {{ item.qty }}
+                        </span>
+
+                        <button (click)="increaseQty(item)">+</button>
+                      </div>
+                    </td>
+
+                    <td>
+                      {{ item.purchasePrice | number: "1.2-2" }}
+                    </td>
+
+                    <td>
+                      {{ item.discount }}
+                    </td>
+
+                    <td>
+                      {{ item.gst }}
+                    </td>
+
+                    <td class="total">
+                      {{
+                        item.qty *
+                          item.purchasePrice *
+                          (1 - item.discount / 100) *
+                          (1 + item.gst / 100) | number: "1.2-2"
+                      }}
+                    </td>
+
+                    <td>
+                      <button class="delete-btn" (click)="removeItem(item)">
+                        🗑
+                      </button>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+
+          <!-- ADD MEDICINE -->
+
+          <button class="add-medicine-btn" (click)="addMedicine()">
+            + Add Medicine
+          </button>
+
+          <!-- ==========================
+           BOTTOM
+      =========================== -->
+
+          <div class="purchase-bottom">
+            <div class="note-section">
+              <label>
+                Purchase Note
+                <span>(Optional)</span>
+              </label>
+
+              <textarea
+                [(ngModel)]="note"
+                placeholder="Enter note here..."
+              ></textarea>
+            </div>
+
+            <div class="total-box">
+              <div class="total-row">
+                <span>Subtotal</span>
+
+                <strong> ₹{{ subtotal | number: "1.2-2" }} </strong>
+              </div>
+
+              <div class="total-row">
+                <span>Discount</span>
+
+                <strong> ₹{{ discountAmount | number: "1.2-2" }} </strong>
+              </div>
+
+              <div class="total-row">
+                <span> GST (12%) </span>
+
+                <strong> ₹{{ gstAmount | number: "1.2-2" }} </strong>
+              </div>
+
+              <div class="grand-total">
+                <span> Grand Total </span>
+
+                <strong> ₹{{ grandTotal | number: "1.2-2" }} </strong>
+              </div>
+            </div>
+          </div>
+
+          <!-- ACTIONS -->
+
+          <div class="purchase-actions">
+            <button class="clear-btn" (click)="clearCart()">Clear Cart</button>
+
+            <button class="save-btn" (click)="savePurchase()">
+              Save Purchase
+            </button>
+          </div>
+        </div>
+
+        <!-- ==========================
+         RIGHT COLUMN
+    =========================== -->
+
+        <div class="right-column">
+          <!-- RECENT PURCHASES -->
+
+          <div class="side-card">
+            <div class="side-header">
+              <h2>Recent Purchase Bills</h2>
+
+              <button>View All</button>
+            </div>
+
+            <div class="side-table-wrapper">
+              <table class="side-table">
+                <thead>
+                  <tr>
+                    <th>Bill No.</th>
+                    <th>Supplier</th>
+                    <th>Amount (₹)</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  @for (bill of purchaseBills; track bill.billNo) {
+                    <tr>
+                      <td>
+                        <button
+                          class="bill-number"
+                          (click)="viewPurchase(bill)"
+                        >
+                          {{ bill.billNo }}
+                        </button>
+                      </td>
+
+                      <td>
+                        {{ bill.supplier }}
+                      </td>
+
+                      <td>
+                        {{ bill.amount | number: "1.2-2" }}
+                      </td>
+
+                      <td>
+                        {{ bill.date }}
+                      </td>
+
+                      <td>
+                        <span
+                          class="status"
+                          [class.pending]="bill.status === 'Pending'"
+                        >
+                          {{ bill.status }}
+                        </span>
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+
+            <button class="view-all-btn">View All Purchase Bills →</button>
+          </div>
+
+          <!-- PAYMENT SUMMARY -->
+
+          <div class="side-card payment-summary">
+            <h2>Payment Summary (This Month)</h2>
+
+            <div class="payment-content">
+              <div class="donut-chart">
+                <div class="donut-hole">
+                  <strong> ₹2.45L </strong>
+
+                  <span> Total Purchases </span>
+                </div>
+              </div>
+
+              <div class="payment-legend">
+                <div>
+                  <span class="dot green-dot"></span>
+
+                  <span>Paid</span>
+
+                  <strong> ₹2,18,820.00 </strong>
+                </div>
+
+                <div>
+                  <span class="dot orange-dot"></span>
+
+                  <span>Pending</span>
+
+                  <strong> ₹26,500.00 </strong>
+                </div>
+
+                <div>
+                  <span class="dot red-dot"></span>
+
+                  <span>Overdue</span>
+
+                  <strong> ₹26,000.00 </strong>
+                </div>
+
+                <div class="total-purchases">
+                  <span>Total Purchases</span>
+
+                  <strong> ₹2,45,320.00 </strong>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TOP SUPPLIERS -->
+
+          <div class="side-card">
+            <div class="side-header">
+              <h2>Top Suppliers (This Month)</h2>
+
+              <button>View All</button>
+            </div>
+
+            <table class="supplier-table">
+              <thead>
+                <tr>
+                  <th>Supplier</th>
+                  <th>Total Purchase (₹)</th>
+                  <th>Bills</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                <tr>
+                  <td>MedPlus Distributors</td>
+
+                  <td>₹1,25,450.00</td>
+
+                  <td>18</td>
+                </tr>
+
+                <tr>
+                  <td>Apollo Pharmacy</td>
+
+                  <td>₹75,230.00</td>
+
+                  <td>10</td>
+                </tr>
+
+                <tr>
+                  <td>Surgi Healthcare</td>
+
+                  <td>₹28,640.00</td>
+
+                  <td>6</td>
+                </tr>
+
+                <tr>
+                  <td>HealthCare Distributors</td>
+
+                  <td>₹15,000.00</td>
+
+                  <td>2</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==============================
+       STOCK ALERT
+  =============================== -->
+
+      <div class="stock-card">
+        <h2>Low Stock Alert (From Purchased Items)</h2>
+
+        <div class="stock-grid">
+          <div class="stock-item">
+            <div class="stock-icon blue">◇</div>
+
+            <div>
+              <strong> Paracetamol 500mg </strong>
+
+              <span>
+                Stock:
+                <b>148</b>
+              </span>
+
+              <small> Reorder Level: 200 </small>
+            </div>
+          </div>
+
+          <div class="stock-item">
+            <div class="stock-icon pink">◇</div>
+
+            <div>
+              <strong> Azithromycin 500mg </strong>
+
+              <span>
+                Stock:
+                <b>89</b>
+              </span>
+
+              <small> Reorder Level: 150 </small>
+            </div>
+          </div>
+
+          <div class="stock-item">
+            <div class="stock-icon cyan">−</div>
+
+            <div>
+              <strong> Cetirizine 10mg </strong>
+
+              <span>
+                Stock:
+                <b>76</b>
+              </span>
+
+              <small> Reorder Level: 120 </small>
+            </div>
+          </div>
+
+          <div class="stock-item">
+            <div class="stock-icon purple">◇</div>
+
+            <div>
+              <strong> Amoxicillin 500mg </strong>
+
+              <span>
+                Stock:
+                <b>45</b>
+              </span>
+
+              <small> Reorder Level: 100 </small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>

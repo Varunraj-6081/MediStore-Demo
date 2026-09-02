@@ -1,0 +1,734 @@
+:host {
+  display: block;
+  width: 100%;
+  height: 100vh;
+  font-family: Inter, "Segoe UI", Arial, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.settings-layout {
+  display: flex;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  background: #f6f9fc;
+  color: #172033;
+}
+
+/* =========================================================
+   MAIN
+========================================================= */
+
+.main-content {
+  flex: 1;
+  min-width: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.settings-page {
+  width: 100%;
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px 30px 20px;
+  background: #f7f9fb;
+  color: #142b40;
+}
+
+/* =========================================
+   PAGE HEADER
+========================================= */
+
+.page-header {
+  margin-bottom: 20px;
+}
+
+.page-header h1 {
+  margin: 0 0 7px;
+  font-size: 28px;
+  font-weight: 750;
+  color: #102c45;
+}
+
+.breadcrumb {
+  display: flex;
+  gap: 9px;
+  align-items: center;
+  font-size: 13px;
+  color: #738391;
+}
+
+.breadcrumb strong {
+  color: #193249;
+}
+
+/* =========================================
+   TABS
+========================================= */
+
+.settings-tabs {
+  min-height: 57px;
+  padding: 0 10px;
+
+  background: white;
+  border: 1px solid #e2e8ec;
+  border-radius: 9px;
+
+  display: flex;
+  align-items: stretch;
+
+  margin-bottom: 18px;
+
+  box-shadow: 0 2px 8px rgba(20, 40, 55, 0.03);
+}
+
+.settings-tabs button {
+  position: relative;
+
+  min-width: 150px;
+  padding: 0 20px;
+
+  border: none;
+  background: transparent;
+
+  color: #18385d;
+
+  font-size: 13px;
+  font-weight: 650;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+
+  cursor: pointer;
+}
+
+.settings-tabs button:hover {
+  background: #f8fbfa;
+}
+
+.settings-tabs button.active {
+  color: #079b70;
+}
+
+.settings-tabs button.active::after {
+  content: "";
+
+  position: absolute;
+
+  left: 12px;
+  right: 12px;
+  bottom: 0;
+
+  height: 3px;
+
+  background: #079b70;
+  border-radius: 3px 3px 0 0;
+}
+
+.tab-icon {
+  font-size: 17px;
+}
+
+/* =========================================
+   GRIDS
+========================================= */
+
+.top-grid {
+  display: grid;
+
+  grid-template-columns:
+    1.15fr
+    0.9fr
+    1.15fr;
+
+  gap: 18px;
+
+  margin-bottom: 18px;
+}
+
+.bottom-grid {
+  display: grid;
+
+  grid-template-columns:
+    1fr
+    1fr;
+
+  gap: 18px;
+}
+
+/* =========================================
+   CARD
+========================================= */
+
+.settings-card {
+  background: white;
+
+  border: 1px solid #e2e8ec;
+  border-radius: 9px;
+
+  padding: 18px;
+
+  box-shadow: 0 2px 8px rgba(20, 40, 55, 0.035);
+}
+
+.settings-card h2 {
+  margin: 0 0 17px;
+
+  color: #102c45;
+
+  font-size: 17px;
+  font-weight: 750;
+}
+
+/* =========================================
+   STORE INFORMATION
+========================================= */
+
+.store-content {
+  min-height: 235px;
+
+  display: flex;
+  gap: 22px;
+
+  align-items: center;
+}
+
+.store-logo {
+  width: 96px;
+  height: 96px;
+
+  flex-shrink: 0;
+
+  border-radius: 50%;
+
+  background: #eaf8f2;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.store-logo span {
+  color: #079b70;
+  font-size: 42px;
+}
+
+.store-details {
+  flex: 1;
+}
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+
+  gap: 25px;
+
+  margin-bottom: 22px;
+}
+
+.store-details label,
+.form-list label,
+.billing-row label {
+  display: block;
+
+  margin-bottom: 7px;
+
+  color: #5d7181;
+
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.store-details strong {
+  display: block;
+
+  color: #18314a;
+
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.address-detail {
+  margin-bottom: 22px;
+}
+
+.address-detail strong {
+  max-width: 360px;
+}
+
+/* =========================================
+   BUTTONS
+========================================= */
+
+.outline-btn {
+  height: 35px;
+
+  padding: 0 14px;
+
+  background: white;
+
+  border: 1px solid #079b70;
+  border-radius: 6px;
+
+  color: #078b66;
+
+  font-size: 12px;
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+.outline-btn:hover {
+  background: #effaf6;
+}
+
+.outline-btn.small {
+  height: 33px;
+}
+
+/* =========================================
+   PREFERENCES
+========================================= */
+
+.form-list {
+  margin-bottom: 17px;
+}
+
+.form-row {
+  display: grid;
+
+  grid-template-columns: 145px 1fr;
+
+  align-items: center;
+
+  gap: 10px;
+
+  margin-bottom: 10px;
+}
+
+.form-row label {
+  margin: 0;
+  color: #1b3a59;
+}
+
+.form-row select,
+.form-row input,
+.billing-row select,
+.billing-row input {
+  width: 100%;
+  height: 32px;
+
+  border: 1px solid #dce5ea;
+  border-radius: 6px;
+
+  background: white;
+
+  padding: 0 10px;
+
+  outline: none;
+
+  color: #233e59;
+
+  font-size: 13px;
+}
+
+.form-row select:focus,
+.form-row input:focus,
+.billing-row select:focus,
+.billing-row input:focus {
+  border-color: #079b70;
+}
+
+.helper-text {
+  margin: -4px 0 0 155px;
+
+  color: #758794;
+
+  font-size: 11px;
+}
+
+/* =========================================
+   USER MANAGEMENT
+========================================= */
+
+.card-title-row {
+  display: flex;
+
+  justify-content: space-between;
+  align-items: center;
+
+  margin-bottom: 12px;
+}
+
+.card-title-row h2 {
+  margin: 0;
+}
+
+.user-table-wrapper {
+  overflow-x: auto;
+}
+
+.user-table {
+  width: 100%;
+  border-collapse: collapse;
+
+  min-width: 570px;
+}
+
+.user-table th {
+  height: 35px;
+
+  padding: 0 7px;
+
+  background: #fafbfc;
+
+  text-align: left;
+
+  color: #647786;
+
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.user-table td {
+  height: 43px;
+
+  padding: 0 7px;
+
+  border-top: 1px solid #edf1f3;
+
+  color: #41586a;
+
+  font-size: 12px;
+}
+
+.user-name {
+  display: flex;
+
+  align-items: center;
+
+  gap: 7px;
+}
+
+.user-name strong {
+  color: #1b354d;
+
+  font-size: 12px;
+}
+
+.avatar {
+  width: 25px;
+  height: 25px;
+
+  border-radius: 50%;
+
+  background: #e7f8f1;
+  color: #079b70;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.user-table tr:nth-child(2) .avatar {
+  background: #e5edff;
+  color: #2875e9;
+}
+
+.user-table tr:nth-child(3) .avatar {
+  background: #eee5ff;
+  color: #7546df;
+}
+
+.user-table tr:nth-child(4) .avatar {
+  background: #fff0db;
+  color: #ef8d14;
+}
+
+.you-badge {
+  padding: 2px 5px;
+
+  border-radius: 4px;
+
+  background: #079b70;
+
+  color: white;
+
+  font-size: 9px;
+  font-weight: 700;
+}
+
+.status {
+  display: inline-flex;
+
+  padding: 4px 8px;
+
+  border-radius: 12px;
+
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.status.active {
+  color: #078d68;
+  background: #dcf6eb;
+}
+
+.status.inactive {
+  color: #e74c55;
+  background: #ffe5e7;
+}
+
+.user-actions {
+  display: flex;
+  gap: 5px;
+}
+
+.user-actions button {
+  width: 25px;
+  height: 25px;
+
+  border: 1px solid #dce5ea;
+  border-radius: 5px;
+
+  background: white;
+
+  color: #078e69;
+
+  cursor: pointer;
+}
+
+.user-actions button.delete {
+  color: #e64b54;
+}
+
+.view-users {
+  display: block;
+
+  margin: 15px auto 0;
+
+  border: none;
+
+  background: transparent;
+
+  color: #0878dd;
+
+  font-size: 12px;
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+/* =========================================
+   BILLING
+========================================= */
+
+.billing-card {
+  min-height: 300px;
+}
+
+.billing-form {
+  max-width: 520px;
+
+  margin-bottom: 20px;
+}
+
+.billing-row {
+  display: grid;
+
+  grid-template-columns: 155px 1fr;
+
+  align-items: center;
+
+  gap: 15px;
+
+  margin-bottom: 10px;
+}
+
+.billing-row label {
+  margin: 0;
+  color: #1b3a59;
+}
+
+.billing-row input,
+.billing-row select {
+  height: 34px;
+}
+
+/* =========================================
+   ABOUT SYSTEM
+========================================= */
+
+.about-card {
+  min-height: 300px;
+}
+
+.about-list {
+  margin-bottom: 22px;
+}
+
+.about-list > div {
+  min-height: 39px;
+
+  border-bottom: 1px solid #edf1f3;
+
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  align-items: center;
+}
+
+.about-list strong {
+  color: #183653;
+
+  font-size: 12px;
+}
+
+.about-list span {
+  color: #29445e;
+
+  font-size: 12px;
+}
+
+/* =========================================
+   OTHER TABS
+========================================= */
+
+.coming-soon {
+  min-height: 400px;
+
+  background: white;
+
+  border: 1px solid #e2e8ec;
+  border-radius: 9px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  box-shadow: 0 2px 8px rgba(20, 40, 55, 0.035);
+}
+
+.coming-icon {
+  width: 65px;
+  height: 65px;
+
+  border-radius: 50%;
+
+  background: #e5f8f0;
+
+  color: #079b70;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 27px;
+}
+
+.coming-soon h2 {
+  margin: 15px 0 5px;
+
+  font-size: 20px;
+}
+
+.coming-soon p {
+  margin: 0;
+
+  font-size: 13px;
+
+  color: #71828e;
+}
+
+/* =========================================
+   FOOTER
+========================================= */
+
+.settings-footer {
+  margin-top: 20px;
+  padding-top: 16px;
+
+  border-top: 1px solid #e1e7eb;
+
+  display: flex;
+
+  justify-content: space-between;
+
+  color: #687c8c;
+
+  font-size: 12px;
+}
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 1350px) {
+  .top-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .users-card {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 1000px) {
+  .top-grid,
+  .bottom-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .users-card {
+    grid-column: auto;
+  }
+
+  .settings-tabs {
+    overflow-x: auto;
+  }
+
+  .settings-tabs button {
+    min-width: 135px;
+  }
+}
+
+@media (max-width: 650px) {
+  .settings-page {
+    padding: 16px;
+  }
+
+  .store-content {
+    flex-direction: column;
+
+    align-items: flex-start;
+  }
+
+  .detail-grid,
+  .form-row,
+  .billing-row {
+    grid-template-columns: 1fr;
+  }
+
+  .helper-text {
+    margin-left: 0;
+  }
+
+  .settings-footer {
+    flex-direction: column;
+    gap: 8px;
+  }
+}
