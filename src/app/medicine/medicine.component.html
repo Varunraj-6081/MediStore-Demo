@@ -1,0 +1,200 @@
+<div class="medicine-layout">
+  <app-sidebar></app-sidebar>
+
+  <!-- ================= MAIN CONTENT ================= -->
+
+  <main class="main-content">
+    <app-topbar></app-topbar>
+
+    <!-- ================= PAGE ================= -->
+
+    <section class="page-content">
+      <!-- PAGE HEADER -->
+
+      <div class="page-header">
+        <div>
+          <h1>Medicines</h1>
+
+          <p>Manage your medicine inventory</p>
+        </div>
+
+        <button class="add-medicine-btn" (click)="addMedicine()">
+          <span>＋</span>
+
+          Add Medicine
+        </button>
+      </div>
+
+      <!-- ================= TABS ================= -->
+
+      <div class="medicine-tabs">
+        <button [class.active]="activeTab === 'All'" (click)="setTab('All')">
+          All
+        </button>
+
+        <button [class.active]="activeTab === 'OTC'" (click)="setTab('OTC')">
+          OTC
+        </button>
+
+        <button
+          [class.active]="activeTab === 'Prescription'"
+          (click)="setTab('Prescription')"
+        >
+          Prescription
+        </button>
+
+        <button
+          [class.active]="activeTab === 'Generic'"
+          (click)="setTab('Generic')"
+        >
+          Generic
+        </button>
+
+        <button
+          [class.active]="activeTab === 'Branded'"
+          (click)="setTab('Branded')"
+        >
+          Branded
+        </button>
+      </div>
+
+      <!-- ================= SEARCH ================= -->
+
+      <div class="search-filter-bar">
+        <div class="medicine-search">
+          <span>⌕</span>
+
+          <input
+            type="text"
+            [(ngModel)]="searchText"
+            placeholder="Search medicine by name, brand or composition..."
+          />
+        </div>
+
+        <button class="filter-btn" (click)="filterMedicines()">
+          <span>⚱</span>
+
+          Filter
+        </button>
+      </div>
+
+      <!-- ================= TABLE ================= -->
+
+      <div class="medicine-card">
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th class="number-column">#</th>
+
+                <th>Medicine Name</th>
+
+                <th>Brand</th>
+
+                <th>Category</th>
+
+                <th>Stock</th>
+
+                <th>Price (₹)</th>
+
+                <th>Status</th>
+
+                <th>Action</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              @for (
+                medicine of filteredMedicines;
+                track medicine.name;
+                let i = $index
+              ) {
+                <tr>
+                  <td class="number-column">
+                    {{ i + 1 }}
+                  </td>
+
+                  <td class="medicine-name">
+                    {{ medicine.name }}
+                  </td>
+
+                  <td>
+                    {{ medicine.brand }}
+                  </td>
+
+                  <td>
+                    {{ medicine.category }}
+                  </td>
+
+                  <td>
+                    {{ medicine.stock }}
+                  </td>
+
+                  <td class="price">
+                    {{ medicine.price | number: "1.2-2" }}
+                  </td>
+
+                  <td>
+                    <span
+                      class="status"
+                      [ngClass]="{
+                        'in-stock': medicine.status === 'In Stock',
+                        'low-stock': medicine.status === 'Low Stock',
+                        'out-stock': medicine.status === 'Out of Stock',
+                      }"
+                    >
+                      {{ medicine.status }}
+                    </span>
+                  </td>
+
+                  <td class="action-cell">
+                    <button class="action-btn" (click)="viewMedicine(medicine)">
+                      ⋮
+                    </button>
+                  </td>
+                </tr>
+              }
+
+              @if (filteredMedicines.length === 0) {
+                <tr>
+                  <td colspan="8" class="empty-state">No medicines found</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+
+        <!-- ================= TABLE FOOTER ================= -->
+
+        <div class="table-footer">
+          <span>
+            Showing 1 to {{ filteredMedicines.length }} of 120 medicines
+          </span>
+
+          <div class="pagination">
+            <button class="pagination-arrow">‹</button>
+
+            <button class="page-number active">1</button>
+
+            <button class="page-number">2</button>
+
+            <button class="page-number">3</button>
+
+            <button class="page-number">4</button>
+
+            <button class="page-number">5</button>
+
+            <button class="pagination-arrow">›</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  @if (showAddMedicine) {
+    <app-add-medicine
+      (close)="closeAddMedicine()"
+      (saved)="saveNewMedicine($event)"
+    ></app-add-medicine>
+  }
+</div>

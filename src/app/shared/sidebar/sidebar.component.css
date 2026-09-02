@@ -1,0 +1,145 @@
+/* host renders no wrapper box so .sidebar stays a direct flex child of the page layout */
+:host {
+  display: contents;
+}
+
+.sidebar {
+  width: 220px;
+  min-width: 220px;
+  height: 100vh;
+  overflow-y: auto;
+  background: linear-gradient(180deg, #142d3f 0%, #172a3c 100%);
+  color: #fff;
+  padding: 24px 14px;
+}
+
+.brand {
+  height: 48px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 10px;
+  margin-bottom: 25px;
+}
+
+.brand-mark {
+  position: relative;
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #20b995, #39b9a1);
+}
+
+.brand-mark::before,
+.brand-mark::after {
+  content: "";
+  position: absolute;
+  background: #fff;
+  border-radius: 2px;
+}
+
+.brand-mark::before {
+  width: 9px;
+  height: 24px;
+  left: 12px;
+  top: 4px;
+}
+
+.brand-mark::after {
+  width: 24px;
+  height: 9px;
+  left: 4px;
+  top: 12px;
+}
+
+.brand-name {
+  font-family: "Poppins", "Segoe UI", Arial, sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  color: #fff;
+}
+
+.brand-name span {
+  color: #0ca47c;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.nav-item {
+  width: 100%;
+  height: 42px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: #c5d1dc;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 0 13px;
+  font-family: "Poppins", "Segoe UI", Arial, sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.nav-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+}
+
+.nav-item.active {
+  background: linear-gradient(
+    90deg,
+    rgba(29, 178, 149, 0.35),
+    rgba(35, 142, 177, 0.28)
+  );
+  color: #fff;
+}
+
+.nav-icon {
+  width: 20px;
+  min-width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-icon svg {
+  width: 19px;
+  height: 19px;
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (min-width: 1600px) {
+  .sidebar {
+    width: 240px;
+    min-width: 240px;
+  }
+}
+
+@media (max-width: 1100px) {
+  .sidebar {
+    width: 190px;
+    min-width: 190px;
+  }
+}
+
+@media (max-width: 700px) {
+  .sidebar {
+    display: none;
+  }
+}

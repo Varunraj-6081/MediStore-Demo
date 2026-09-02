@@ -1,0 +1,460 @@
+<div class="customers-layout">
+  <app-sidebar></app-sidebar>
+
+  <main class="main-content">
+    <app-topbar></app-topbar>
+
+    <section class="customers-page">
+      <!-- HEADER -->
+
+      <div class="page-header">
+        <div>
+          <h1>Customers</h1>
+
+          <div class="breadcrumb">
+            <span>Home</span>
+            <span>›</span>
+            <strong>Customers</strong>
+          </div>
+        </div>
+
+        <button class="add-btn" (click)="addCustomer()">＋ Add Customer</button>
+      </div>
+
+      <!-- SUMMARY CARDS -->
+
+      <div class="summary-grid">
+        <div class="summary-card">
+          <div class="summary-icon blue">👥</div>
+
+          <div class="summary-content">
+            <span>Total Customers</span>
+
+            <strong>1,356</strong>
+
+            <small class="green-text">
+              ↑ 9.4%
+              <em>from last month</em>
+            </small>
+          </div>
+        </div>
+
+        <div class="summary-card">
+          <div class="summary-icon green">👤</div>
+
+          <div class="summary-content">
+            <span>Active Customers</span>
+
+            <strong>980</strong>
+
+            <small class="green-text">
+              ↑ 8.2%
+              <em>from last month</em>
+            </small>
+          </div>
+        </div>
+
+        <div class="summary-card">
+          <div class="summary-icon orange">₹</div>
+
+          <div class="summary-content">
+            <span>Total Sales (This Month)</span>
+
+            <strong>₹3,45,678.00</strong>
+
+            <small class="green-text">
+              ↑ 15.2%
+              <em>from last month</em>
+            </small>
+          </div>
+        </div>
+
+        <div class="summary-card">
+          <div class="summary-icon red">▣</div>
+
+          <div class="summary-content">
+            <span>Outstanding Amount</span>
+
+            <strong>₹18,750.00</strong>
+
+            <small class="blue-text"> View Pending Payments </small>
+          </div>
+        </div>
+      </div>
+
+      <!-- MAIN GRID -->
+
+      <div class="main-grid">
+        <!-- LEFT COLUMN -->
+
+        <div class="left-column">
+          <!-- CUSTOMER LIST -->
+
+          <div class="card customer-card">
+            <div class="card-title">
+              <h2>Customers List</h2>
+            </div>
+
+            <!-- FILTER BAR -->
+
+            <div class="filter-bar">
+              <div class="search-box">
+                <span>⌕</span>
+
+                <input
+                  type="text"
+                  [(ngModel)]="searchText"
+                  (ngModelChange)="searchChanged()"
+                  placeholder="Search customer by name, phone or email..."
+                />
+              </div>
+
+              <select
+                [(ngModel)]="selectedStatus"
+                (ngModelChange)="filterChanged()"
+              >
+                @for (status of statuses; track status) {
+                  <option [value]="status">
+                    {{ status }}
+                  </option>
+                }
+              </select>
+
+              <select
+                [(ngModel)]="selectedType"
+                (ngModelChange)="filterChanged()"
+              >
+                @for (type of types; track type) {
+                  <option [value]="type">
+                    {{ type }}
+                  </option>
+                }
+              </select>
+
+              <button class="export-btn" (click)="exportCustomers()">
+                ↓ Export
+              </button>
+            </div>
+
+            <!-- CUSTOMER TABLE -->
+
+            <div class="table-wrapper">
+              <table class="customer-table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Customer Name</th>
+                    <th>Phone</th>
+                    <th>Email</th>
+                    <th>City</th>
+                    <th>Total Purchase (₹)</th>
+                    <th>Outstanding (₹)</th>
+                    <th>Type</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  @for (
+                    customer of paginatedCustomers;
+                    track customer.id;
+                    let i = $index
+                  ) {
+                    <tr>
+                      <td>
+                        {{ (currentPage - 1) * pageSize + i + 1 }}
+                      </td>
+
+                      <td>
+                        <strong>
+                          {{ customer.name }}
+                        </strong>
+                      </td>
+
+                      <td>
+                        {{ customer.phone }}
+                      </td>
+
+                      <td>
+                        {{ customer.email }}
+                      </td>
+
+                      <td>
+                        {{ customer.city }}
+                      </td>
+
+                      <td>₹{{ customer.totalPurchase | number: "1.2-2" }}</td>
+
+                      <td>₹{{ customer.outstanding | number: "1.2-2" }}</td>
+
+                      <td>
+                        {{ customer.type }}
+                      </td>
+
+                      <td>
+                        <span
+                          class="status"
+                          [class.active]="customer.status === 'Active'"
+                          [class.inactive]="customer.status === 'Inactive'"
+                        >
+                          {{ customer.status }}
+                        </span>
+                      </td>
+
+                      <td>
+                        <div class="action-wrapper">
+                          <button
+                            class="dots"
+                            (click)="toggleMenu(customer.id)"
+                          >
+                            ⋮
+                          </button>
+
+                          @if (openMenu === customer.id) {
+                            <div class="action-menu">
+                              <button (click)="viewCustomer(customer)">
+                                View Customer
+                              </button>
+
+                              <button (click)="editCustomer(customer)">
+                                Edit Customer
+                              </button>
+
+                              <button (click)="viewSales(customer)">
+                                View Sales
+                              </button>
+                            </div>
+                          }
+                        </div>
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+
+            <!-- PAGINATION -->
+
+            <div class="pagination">
+              <span>
+                Showing
+                {{ pageStart }}
+                to
+                {{ pageEnd }}
+                of 1,356 entries
+              </span>
+
+              <div class="page-buttons">
+                <button (click)="previousPage()" [disabled]="currentPage === 1">
+                  ‹
+                </button>
+
+                @for (page of [].constructor(totalPages); track $index) {
+                  <button
+                    [class.selected]="currentPage === $index + 1"
+                    (click)="goToPage($index + 1)"
+                  >
+                    {{ $index + 1 }}
+                  </button>
+                }
+
+                <button
+                  (click)="nextPage()"
+                  [disabled]="currentPage === totalPages"
+                >
+                  ›
+                </button>
+              </div>
+
+              <div class="rows">
+                Rows per page:
+
+                <select
+                  [(ngModel)]="pageSize"
+                  (ngModelChange)="currentPage = 1"
+                >
+                  <option [ngValue]="10">10</option>
+                  <option [ngValue]="20">20</option>
+                  <option [ngValue]="50">50</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- RECENT SALES -->
+
+          <div class="card">
+            <div class="section-header">
+              <h2>Recent Sales to Customers</h2>
+
+              <button>View All Sales</button>
+            </div>
+
+            <table class="simple-table">
+              <thead>
+                <tr>
+                  <th>Invoice No.</th>
+                  <th>Customer</th>
+                  <th>Amount (₹)</th>
+                  <th>Date</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                @for (sale of recentSales; track sale.invoice) {
+                  <tr>
+                    <td class="invoice">
+                      {{ sale.invoice }}
+                    </td>
+
+                    <td>
+                      {{ sale.customer }}
+                    </td>
+
+                    <td>₹{{ sale.amount | number: "1.2-2" }}</td>
+
+                    <td>
+                      {{ sale.date }}
+                    </td>
+
+                    <td>
+                      <span class="paid">
+                        {{ sale.status }}
+                      </span>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- RIGHT COLUMN -->
+
+        <div class="right-column">
+          <!-- CUSTOMER ANALYTICS -->
+
+          <div class="card analytics-card">
+            <div class="section-header">
+              <h2>Customer Analytics (This Month)</h2>
+            </div>
+
+            <div class="analytics-body">
+              <div class="donut">
+                <div class="donut-inner">
+                  <strong>1,356</strong>
+
+                  <span>Total Customers</span>
+                </div>
+              </div>
+
+              <div class="legend">
+                <div>
+                  <i class="dot green"></i>
+                  <span>Active Customers</span>
+                  <strong>980 (72.2%)</strong>
+                </div>
+
+                <div>
+                  <i class="dot orange"></i>
+                  <span>Inactive Customers</span>
+                  <strong>256 (18.9%)</strong>
+                </div>
+
+                <div>
+                  <i class="dot red"></i>
+                  <span>New Customers</span>
+                  <strong>120 (8.9%)</strong>
+                </div>
+              </div>
+            </div>
+
+            <div class="analytics-note">
+              ↗
+
+              <span>
+                New customers increased by
+                <strong>8.9%</strong>
+                compared to last month.
+              </span>
+            </div>
+          </div>
+
+          <!-- TOP CUSTOMERS -->
+
+          <div class="card">
+            <div class="section-header">
+              <h2>Top Customers (This Month)</h2>
+
+              <button>View All</button>
+            </div>
+
+            <table class="simple-table">
+              <thead>
+                <tr>
+                  <th>Customer</th>
+                  <th>Total Purchase (₹)</th>
+                  <th>Orders</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                @for (customer of topCustomers; track customer.name) {
+                  <tr>
+                    <td>
+                      {{ customer.name }}
+                    </td>
+
+                    <td>₹{{ customer.purchase | number: "1.2-2" }}</td>
+
+                    <td>
+                      {{ customer.orders }}
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+
+          <!-- PAYMENT DUE -->
+
+          <div class="card">
+            <div class="section-header">
+              <h2>Payment Due from Customers</h2>
+
+              <button>View All</button>
+            </div>
+
+            <table class="simple-table">
+              <thead>
+                <tr>
+                  <th>Customer</th>
+                  <th>Outstanding Amount (₹)</th>
+                  <th>Due Since</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                @for (item of paymentDue; track item.customer) {
+                  <tr>
+                    <td>
+                      {{ item.customer }}
+                    </td>
+
+                    <td>₹{{ item.amount | number: "1.2-2" }}</td>
+
+                    <td>
+                      {{ item.dueSince }}
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
